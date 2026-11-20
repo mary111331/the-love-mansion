@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>The Love Mansion</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#0b0710;color:#f3e9d6;font-family:Georgia,'Times New Roman',serif;-webkit-user-select:none;user-select:none;touch-action:none}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.hide{display:none!important}
+button{font-family:inherit;cursor:pointer}
+#hud{position:fixed;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top) + 8px) 10px 0;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none;z-index:5}
+#place{pointer-events:none;background:rgba(20,12,24,.55);border:1px solid rgba(243,201,120,.35);border-radius:14px;padding:6px 12px;font-size:15px;max-width:52vw}
+#place small{display:block;font-size:11px;opacity:.75;font-style:italic}
+#hbtn{display:flex;gap:6px;pointer-events:auto;flex-wrap:wrap;justify-content:flex-end;max-width:46vw}
+.hb{background:rgba(20,12,24,.7);color:#f3e9d6;border:1px solid rgba(243,201,120,.45);border-radius:12px;padding:7px 10px;font-size:13px}
+#secrets{position:fixed;left:10px;top:calc(env(safe-area-inset-top) + 64px);font-size:12px;opacity:.8;z-index:5;pointer-events:none;background:rgba(20,12,24,.45);padding:3px 8px;border-radius:10px}
+#joy{position:fixed;left:calc(env(safe-area-inset-left) + 22px);bottom:calc(env(safe-area-inset-bottom) + 26px);width:124px;height:124px;border-radius:50%;background:rgba(255,240,220,.08);border:1px solid rgba(243,201,120,.35);z-index:4;touch-action:none}
+#knob{position:absolute;left:37px;top:37px;width:50px;height:50px;border-radius:50%;background:rgba(243,201,120,.35);border:1px solid rgba(255,230,180,.6)}
+#lookhint{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom) + 30px);font-size:12px;opacity:.55;z-index:4;pointer-events:none;text-align:right}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 168px);background:rgba(25,14,30,.88);border:1px solid rgba(243,201,120,.5);border-radius:14px;padding:9px 14px;font-size:15px;max-width:86vw;text-align:center;z-index:20;pointer-events:none;transition:opacity .4s;opacity:0}
+#toast.on{opacity:1}
+#fade{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .35s;z-index:30}
+#fade.on{opacity:1}
+.panel{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(8,4,10,.55);padding:calc(env(safe-area-inset-top) + 14px) 12px calc(env(safe-area-inset-bottom) + 14px)}
+.box{background:#f7efe0;color:#2a1d18;border-radius:16px;max-width:620px;width:100%;max-height:100%;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.6);overflow:hidden}
+.box h2{margin:0;padding:14px 16px 4px;font-size:21px;font-weight:normal;color:#5a2230}
+.box .sub{padding:0 16px 6px;font-size:12px;color:#8a6d5c;font-style:italic}
+.box .body{padding:6px 16px 10px;overflow-y:auto;-webkit-overflow-scrolling:touch;font-size:16px;line-height:1.5;touch-action:pan-y;-webkit-user-select:text;user-select:text}
+.box .body p{margin:0 0 .8em}
+.box .body s{color:#9a7f70}
+.box .body pre{white-space:pre-wrap;background:#efe3cf;padding:8px;border-radius:8px;font-size:13px}
+.box .body blockquote{margin:0 0 .8em;padding-left:10px;border-left:3px solid #d9b77a;font-style:italic}
+.box .body h3,.box .body h4{color:#5a2230;margin:.6em 0 .4em;font-weight:normal}
+.box .btns{display:flex;flex-wrap:wrap;gap:8px;padding:10px 14px 14px;border-top:1px solid #e6d6bd}
+.box .btns button{flex:1 1 auto;background:#5a2230;color:#f7efe0;border:0;border-radius:11px;padding:10px 12px;font-size:15px;min-width:90px}
+.box .btns button.alt{background:#e6d6bd;color:#4a2a22}
+.item{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;background:#fffaf1;border:1px solid #e6d6bd;border-radius:10px;padding:10px 12px;margin:0 0 6px;font-size:15px;color:#2a1d18}
+.item span{font-size:12px;color:#8a6d5c;white-space:nowrap}
+.body h5{margin:12px 0 6px;font-size:13px;color:#8a6d5c;text-transform:uppercase;letter-spacing:.06em;font-weight:normal}
+#start{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#3a1b33 0%,#120814 70%);padding:20px;overflow-y:auto}
+#start .in{max-width:520px;text-align:center}
+#start h1{font-weight:normal;font-size:40px;margin:0 0 4px;color:#f3c978;letter-spacing:.02em}
+#start .tag{font-style:italic;opacity:.85;margin:0 0 18px}
+#start p{font-size:15px;line-height:1.5;opacity:.9}
+#start button{display:block;width:100%;margin:10px 0;padding:14px;border-radius:14px;border:1px solid #f3c978;background:#5a2230;color:#f7efe0;font-size:18px}
+#start button.beach{background:linear-gradient(90deg,#14304a,#4b2a5a);}
+#start .how{font-size:13px;opacity:.7;margin-top:14px}
+#yt{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 10px);width:min(92vw,420px);background:#1b0f1e;border:1px solid rgba(243,201,120,.5);border-radius:14px;z-index:35;overflow:hidden}
+#yt .bar{display:flex;align-items:center;gap:6px;padding:6px 8px;font-size:13px}
+#yt .bar b{flex:1;font-weight:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#yt .bar button{background:#3a2240;color:#f3e9d6;border:0;border-radius:9px;padding:6px 9px;font-size:12px}
+#ytbox{position:relative;width:100%;padding-top:56.25%}
+#yt.big{width:min(96vw,760px);top:calc(env(safe-area-inset-top) + 64px);bottom:auto}
+#ytbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#frame{position:fixed;inset:0;z-index:45;background:#000}
+#frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#frameClose{position:absolute;right:10px;top:calc(env(safe-area-inset-top) + 8px);z-index:2;background:rgba(90,34,48,.92);color:#f7efe0;border:1px solid #f3c978;border-radius:12px;padding:8px 12px;font-size:14px}
+#cath{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 160px);width:min(92vw,380px);background:rgba(23,18,48,.9);border:1px solid rgba(160,190,255,.5);border-radius:14px;padding:10px 12px;z-index:15;color:#e8e6ff;font-size:14px}
+#cath input{width:100%}
+#cath .row{display:flex;gap:8px;margin-top:8px}
+#cath .row button{flex:1;background:#2d2a6a;color:#fff;border:0;border-radius:10px;padding:9px;font-size:14px}
+#cv{font-size:26px;text-align:center;font-family:Menlo,monospace;color:#9fd0ff}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud" class="hide"><div id="place"><span id="pname">The Love Mansion</span><small id="psub"></small></div>
+<div id="hbtn"><button class="hb" id="bPlaces">Places</button><button class="hb" id="bArch">Archive</button><button class="hb" id="bSound">Sound on</button><button class="hb" id="bEthio">Ethio-jazz off</button><button class="hb" id="bHelp">?</button></div></div>
+<div id="secrets" class="hide"></div>
+<div id="joy" class="hide"><div id="knob"></div></div>
+<div id="lookhint" class="hide">drag to look<br>tap anything</div>
+<div id="toast"></div>
+<div id="fade"></div>
+<div id="cath" class="hide"><div id="cv">98.3%</div><input id="cr" type="range" min="90" max="100" step="0.1" value="98.3"><div class="row"><button id="clap">Clap</button><button id="c983">98.3%</button><button id="cclose">Done</button></div></div>
+<div id="card" class="panel hide"><div class="box"><h2 id="cT"></h2><div class="sub" id="cS"></div><div class="body" id="cB"></div><div class="btns" id="cBtns"></div></div></div>
+<div id="yt" class="hide"><div class="bar"><b id="ytT"></b><button id="ytNext">Other version</button><button id="ytX">Close</button></div><div id="ytbox"></div></div>
+<div id="frame" class="hide"><button id="frameClose">Back to the mansion</button></div>
+<div id="start"><div class="in"><h1>The Love Mansion</h1><div class="tag">a master work archive, for Mary</div>
+<p>A wooden house by the sea, with a basement full of records, a jazz club behind a door, a marble bath upstairs, and a garden that runs down to the beach. At the end of the beach, a lantern path climbs to the cigarette after hill.</p>
+<p>Everything in it is made from what we saved: the letters, the poems, Echoes of the Void, Hallucinations of Love, Gray and Zip, every note.</p>
+<button id="go">Walk in through the front door</button>
+<button id="goBeach" class="beach">Hallucinations of Love: Beach Edition</button>
+<div class="how" id="how"></div></div></div>
+<script id="aptdata" type="application/json">__APT__</script>
+<script id="beachorig" type="application/json">__BEACHORIG__</script>
+<script id="jazzorig" type="application/json">__JAZZORIG__</script>
+<script id="echoorig" type="application/json">__ECHOORIG__</script>
+<script id="lovedata" type="application/json">__LOVE__</script>
+<script id="musicdata" type="application/json">__MUSIC__</script>
+<script id="beachdata" type="application/json">__BEACH__</script>
+<script id="extradata" type="application/json">__EXTRA__</script>
+<script>@@THREE_LIB@@</script>
+<script>@@LM_APP@@</script>
+</body>
+</html>
