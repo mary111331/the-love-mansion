@@ -86,7 +86,7 @@ function defSecret(id){SECRETS[id]=1;}
 function secret(id,title,html){var fresh=!found[id];found[id]=1;try{localStorage.setItem('lm_secrets',JSON.stringify(found));}catch(e){}updSecrets();
  if(fresh){chime();toast('Hidden surprise found: '+Object.keys(found).filter(function(k){return SECRETS[k];}).length+' of '+Object.keys(SECRETS).length);}
  if(title)setTimeout(function(){card(title,html||'',[],'a hidden surprise');},fresh?700:0);}
-function updSecrets(){var n=Object.keys(found).filter(function(k){return SECRETS[k];}).length;$('secrets').textContent='\u2726 '+n+' of '+Object.keys(SECRETS).length+' hidden surprises';}
+function updSecrets(){var n=Object.keys(found).filter(function(k){return SECRETS[k];}).length;$('secrets').textContent='\u2726 '+n+' of '+Object.keys(SECRETS).length+' hidden surprises';hintRefresh();}
 var counts={};function count(id,n){counts[id]=(counts[id]||0)+1;return counts[id]>=n&&counts[id]%n===0;}
 
 // ---------- audio ----------

@@ -60,6 +60,8 @@ button{font-family:inherit;cursor:pointer}
 #frameClose{position:absolute;right:10px;top:calc(env(safe-area-inset-top) + 8px);z-index:2;background:rgba(90,34,48,.92);color:#f7efe0;border:1px solid #f3c978;border-radius:12px;padding:8px 12px;font-size:14px}
 #cath{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 160px);width:min(92vw,380px);background:rgba(23,18,48,.9);border:1px solid rgba(160,190,255,.5);border-radius:14px;padding:10px 12px;z-index:15;color:#e8e6ff;font-size:14px}
 #cath input{width:100%}
+#cath .row button.lmhint{animation:lmshim 2.6s ease-in-out infinite}
+@keyframes lmshim{0%,100%{box-shadow:0 0 0 rgba(255,230,170,0)}50%{box-shadow:0 0 12px 2px rgba(255,230,170,.65)}}
 #cath .row{display:flex;gap:8px;margin-top:8px}
 #cath .row button{flex:1;background:#2d2a6a;color:#fff;border:0;border-radius:10px;padding:9px;font-size:14px}
 #cv{font-size:26px;text-align:center;font-family:Menlo,monospace;color:#9fd0ff}
@@ -187,7 +189,7 @@ function defSecret(id){SECRETS[id]=1;}
 function secret(id,title,html){var fresh=!found[id];found[id]=1;try{localStorage.setItem('lm_secrets',JSON.stringify(found));}catch(e){}updSecrets();
  if(fresh){chime();toast('Hidden surprise found: '+Object.keys(found).filter(function(k){return SECRETS[k];}).length+' of '+Object.keys(SECRETS).length);}
  if(title)setTimeout(function(){card(title,html||'',[],'a hidden surprise');},fresh?700:0);}
-function updSecrets(){var n=Object.keys(found).filter(function(k){return SECRETS[k];}).length;$('secrets').textContent='\u2726 '+n+' of '+Object.keys(SECRETS).length+' hidden surprises';}
+function updSecrets(){var n=Object.keys(found).filter(function(k){return SECRETS[k];}).length;$('secrets').textContent='\u2726 '+n+' of '+Object.keys(SECRETS).length+' hidden surprises';hintRefresh();}
 var counts={};function count(id,n){counts[id]=(counts[id]||0)+1;return counts[id]>=n&&counts[id]%n===0;}
 
 // ---------- audio ----------
@@ -371,7 +373,7 @@ function armchair(x,z,ry,col,parent){var g=grp(x,0,z,ry,parent);var m=mat(col||'
 function recordPlayer(x,y,z,parent){var g=grp(x,y,z,0,parent);box(.5,.12,.4,mat('#3a2010',{map:woodTex('#3a2010','10,5,2',2,[1,1])}),0,0,0,g);var pl=cyl(.17,.17,.012,mat('#111',{r:.3}),-.05,.12,0,40,g);cyl(.05,.05,.014,mat('#c8102e'),-.05,.12,0,20,g);var arm=box(.02,.02,.26,mat('#c0c0c0',{m:.8,r:.3}),.17,.15,0,g);arm.rotation.y=.4;g.userData.spin=false;anim(function(dt){if(g.userData.spin)pl.rotation.y+=dt*3.5;});return g;}
 function koda(x,y,z,s,parent){var g=grp(x,y,z,0,parent);s=s||1;var fur=mat('#b08a5a',{r:1});var b=sph(.12*s,mat('#e58aa8'),0,.12*s,0,g);b.scale.set(1,1.05,.85);sph(.1*s,fur,0,.3*s,0,g);sph(.035*s,fur,-.075*s,.38*s,0,g);sph(.035*s,fur,.075*s,.38*s,0,g);sph(.015*s,mat('#111'),-.035*s,.32*s,.09*s,g);sph(.015*s,mat('#111'),.035*s,.32*s,.09*s,g);sph(.022*s,mat('#5a3a20'),0,.29*s,.095*s,g);sph(.045*s,fur,-.07*s,.03*s,.05*s,g);sph(.045*s,fur,.07*s,.03*s,.05*s,g);return g;}
 function kodaTap(g){var b=0;tap(g,function(){g.rotation.z=.25;setTimeout(function(){g.rotation.z=-.2;},150);setTimeout(function(){g.rotation.z=0;},300);
- if(count('koda'+g.id,3))secret('koda','Bukowski on his foot','<p>Koda: light-brown curly fur and a pink \u201cFEEL BETTER\u201d jumper. You found him sitting on a post on a walk in August, the same day you had written Bukowski\u2019s \u201cThe Laughing Heart\u201d in your diary, and later saw \u201cBukowski\u201d written on his foot.</p>'+(docExists('Koda, a representation of Miles')?'<p>His note is on the shelf in the library too.</p>':''));else toast(pick(['Koda wriggles.','FEEL BETTER, says the jumper.','Koda leans against you.']));},'Koda');}
+ if(count('koda'+g.id,3))secret('koda','Bukowski on his foot','<p>Koda: light-brown curly fur and a pink \u201cFEEL BETTER\u201d jumper. You found him sitting on a post on a walk in August, the same day you had written Bukowski\u2019s \u201cThe Laughing Heart\u201d in your diary, and later saw \u201cBukowski\u201d written on his foot.</p>'+(docExists('Koda, a representation of Miles')?'<p>His note is on the shelf in the library too.</p>':''));else toast(pick(['Koda wriggles.','FEEL BETTER, says the jumper.','Koda leans against you.']));},'Koda');hint(g,'koda');}
 function cat(x,y,z,ry,parent){var g=grp(x,y,z,ry,parent);var m=mat('#141012',{r:.9});var body=sph(.16,m,0,.16,0,g);body.scale.set(1,.85,1.7);var head=sph(.11,m,0,.3,.24,g);var e1=new THREE.Mesh(new THREE.ConeGeometry(.04,.08,4),m);e1.position.set(-.06,.4,.24);g.add(e1);var e2=e1.clone();e2.position.x=.06;g.add(e2);
  sph(.022,basic('#e8d24a'),-.045,.32,.33,g);sph(.022,basic('#e8d24a'),.045,.32,.33,g);var tail=cyl(.025,.018,.4,m,0,.1,-.3,8,g);tail.rotation.x=-.9;anim(function(dt,t){tail.rotation.z=Math.sin(t*2)*.4;head.rotation.y=Math.sin(t*.5)*.3;});g.userData.head=head;return g;}
 
@@ -395,7 +397,7 @@ defScene('foyer',{name:'The Love Mansion',sub:'the front hall',bg:'#1a0f0c',amb:
  var cr=grp(-4.6,0,4.2);cyl(.04,.06,1.9,mat('#3a2010'),0,0,0,8,cr);cyl(.25,.28,.05,mat('#3a2010'),0,0,0,16,cr);solid(-4.6,4.2,.6,.6);
  var coats=[['#151012','Miles\u2019s black leather jacket',0],['#1e1a1c','Mary\u2019s black trench',PI/2],['#2a4a8a','the small blue coat (Gray)',PI],['#b02a2a','the small red coat (Zip)',-PI/2]];
  coats.forEach(function(c,i){var cg=grp(Math.cos(c[2])*.2,1.85,Math.sin(c[2])*.2,-c[2]+PI/2,cr);var small=i>1;var cb=box(small?.3:.46,small?.5:.95,.16,mat(c[0],{r:i===0?.35:.9}),0,small?-.55:-1.0,0,cg);tap(cg,function(){cg.rotation.z=.15;setTimeout(function(){cg.rotation.z=0;},300);
-   if(i===3&&count('zipcoat',3))secret('zipcoat','Zip wears his around the flat anyway',md(EXTRA.coats||''));else card('The coats',md(EXTRA.coats||'')+'<p><i>You touched '+c[1]+'.</i></p>',[]);},c[1]);});
+   if(i===3&&count('zipcoat',3))secret('zipcoat','Zip wears his around the flat anyway',md(EXTRA.coats||''));else card('The coats',md(EXTRA.coats||'')+'<p><i>You touched '+c[1]+'.</i></p>',[]);},c[1]);if(i===3)hint(cg,'zipcoat');});
  note(-4.6,2.25,4.6,PI,['The coats'],null,null,{fs:36,italic:false,wid:.5});
  // console table + radio
  table(-5.4,-0.4,.5,1.3,.85,'#4a2a18');solid(-5.4,-.4,.6,1.4);
@@ -403,7 +405,7 @@ defScene('foyer',{name:'The Love Mansion',sub:'the front hall',bg:'#1a0f0c',amb:
  tap(rd,function(){burst(1.2,2200,.25,.4);card('98.3%',linesHtml(EXTRA.radio||[]),[{t:'To the White Noise Cathedral',fn:function(){closeCard();go('cathedral');}}].concat(docExists('Digital Frequency')?[{t:'Digital Frequency',alt:1,fn:function(){openDoc('Digital Frequency');}}]:[]),'the radio in the hall, tuned between stations');},'radio');
  // mirror
  var mr=grp(5.94,1.7,1.8,-PI/2);box(1,1.6,.05,mat('#8a6a2a',{m:.6,r:.3}),0,-.8,0,mr);var mg=plane(.86,1.46,mat('#9fb4c4',{m:1,r:.08}),0,0,.03,0,mr);
- tap(mr,function(){if(count('mirror',4))secret('mirror','The mirror fogs','<p>Someone wrote in the fog, the way they do on the misty window in the winter garden:</p><p style="font-size:22px;text-align:center">Lumina</p>'+(docExists('Lumina, a name with a history')?'<p>Its story is in the archive: \u201cLumina, a name with a history\u201d.</p>':''));else toast(pick(['Your reflection, in candlelight.','The mirror is old and a little silver at the edges.','Tap again. Mirrors like attention.']));},'mirror');
+ tap(mr,function(){if(count('mirror',4))secret('mirror','The mirror fogs','<p>Someone wrote in the fog, the way they do on the misty window in the winter garden:</p><p style="font-size:22px;text-align:center">Lumina</p>'+(docExists('Lumina, a name with a history')?'<p>Its story is in the archive: \u201cLumina, a name with a history\u201d.</p>':''));else toast(pick(['Your reflection, in candlelight.','The mirror is old and a little silver at the edges.','Tap again. Mirrors like attention.']));},'mirror');hint(mr,'mirror');
  // album wall
  var ps=ALBUM.slice(0,4);ps.forEach(function(a,i){var img=new Image();var t=new THREE.Texture(img);img.onload=function(){t.needsUpdate=true;};img.src=a.src;if(THREE.sRGBEncoding!==undefined)t.encoding=THREE.sRGBEncoding;var f=frame(1,0.75,t,-3+i*2,2.6,-4.96,0);tap(f,function(){openAlbum(i);},'photo');});
  sign(['The Love Mansion','a master work archive'],2.6,0,3.7,-4.95,0,{fs:44,color:'#f3c978',w:768});
@@ -442,7 +444,7 @@ defScene('kitchen',{name:'The kitchen',sub:'omelets, dishes and toast',bg:'#1a12
  var fr=grp(3.4,0,-3.55);box(.85,2,.7,mat('#e9e4d8',{r:.35}),0,0,0,fr);solid(3.4,-3.55,.9,.75);box(.04,.5,.04,mat('#bbb',{m:.8}),-.36,1.1,.36,fr);
  var mg=['M','A','R','Y','\u2665','I','R','U'];mg.forEach(function(c,i){var t=textCanvas([c],{fs:90,color:pick(['#c8102e','#2a4a8a','#e8b33a','#2f6b34']),w:128,h:128,pad:0});var m=plane(.09,.09,new THREE.MeshBasicMaterial({map:t,transparent:true}),-.3+(i%4)*.18,1.5-Math.floor(i/4)*.2,.36,0,fr);});
  note(3.55,1.05,-3.19,0,['Kitchen scenes'],null,null,{fs:32,wid:.34});
- tap(fr,function(){if(count('fridge',3))secret('fridge','I R U','<p>The magnets on the fridge rearrange themselves: <b>I R U</b>. \u201cI are you\u201d, the way you meant it, not \u201cI hear you\u201d.</p>');else listDocs('Kitchen scenes',matchDocs(/kitchen|omelet|Küche|toast|towels|morning scene/i),'from the novels and the notes');},'fridge');
+ tap(fr,function(){if(count('fridge',3))secret('fridge','I R U','<p>The magnets on the fridge rearrange themselves: <b>I R U</b>. \u201cI are you\u201d, the way you meant it, not \u201cI hear you\u201d.</p>');else listDocs('Kitchen scenes',matchDocs(/kitchen|omelet|Küche|toast|towels|morning scene/i),'from the novels and the notes');},'fridge');hint(fr,'fridge');
  // table + chairs
  table(-.6,.6,1.4,.9,.78,'#6b3d22');chair(-1.5,.6,PI/2);chair(.3,.6,-PI/2);solid(-.6,.6,1.6,1.1);
  var vase=grp(-.6,.78,.6);cyl(.06,.05,.2,mat('#d8e8f0',{t:.6,r:.1}),0,0,0,12,vase);var rose=sph(.06,mat('#b0102a'),0,.32,0,vase);cyl(.006,.006,.22,mat('#2f6b34'),0,.1,0,4,vase);
@@ -469,20 +471,20 @@ defScene('library',{name:'The library',sub:'every poem, every picture, every not
  armchair(-2.6,2.6,PI);solid(-2.6,2.6,.9,.8);
  // fireplace
  var fp=grp(2.9,0,4.85,PI);box(2,1.4,.4,mat('#6a5a50',{r:.9}),0,0,0,fp);box(1.2,.8,.42,basic('#120806'),0,.1,.01,fp);var fl=light('#ff7a2a',1.8,7,2.9,.6,4.3);var flames=[];for(var i=0;i<6;i++){var f=sph(.09,basic(pick(['#ff9a2a','#ffcf4a','#ff5a1a']),{add:1}),rnd(-.35,.35),.25,.15,fp);f.scale.y=2;flames.push(f);}anim(function(dt,t){flames.forEach(function(f,i){f.scale.y=1.6+Math.sin(t*9+i*1.7)*.6;f.position.y=.25+Math.abs(Math.sin(t*6+i))*.06;});fl.intensity=1.6+Math.sin(t*11)*.3;});
- tap(fp,function(){burst(.6,2600,.3,.6);toast('The fire pops.');if(count('fire',4))secret('ghostvow','A page that did not burn',docExists('Coded Poem - The Ghost\u2019s Vow')||docExists("Coded Poem - The Ghost's Vow")?'<p>A page curls out of the grate, untouched: \u201cCoded Poem - The Ghost\u2019s Vow\u201d. It is on the Notes shelves too.</p>':'<p>A page curls out of the grate, untouched.</p>');},'fireplace');solid(2.9,4.75,2.1,.6);
+ tap(fp,function(){burst(.6,2600,.3,.6);toast('The fire pops.');if(count('fire',4))secret('ghostvow','A page that did not burn',docExists('Coded Poem - The Ghost\u2019s Vow')||docExists("Coded Poem - The Ghost's Vow")?'<p>A page curls out of the grate, untouched: \u201cCoded Poem - The Ghost\u2019s Vow\u201d. It is on the Notes shelves too.</p>':'<p>A page curls out of the grate, untouched.</p>');},'fireplace');hint(fp,'ghostvow');solid(2.9,4.75,2.1,.6);
  // door to Apartment 23
  var ad=door(-5.94,-4.3+.0,PI/2,'library',null,'Apartment 23',{col:'#2a4a6a',w:1.0});ad.userData.tap=function(){openWorld('aptdata','World Twenty Three 2.0, the whole apartment');};
  // globe
  var gl=grp(4.3,0,-2.4);cyl(.03,.12,.9,mat('#3a2010'),0,0,0,8,gl);var glb=sph(.28,mat('#2a5a7a',{r:.6}),0,1.15,0,gl);solid(4.3,-2.4,.6,.6);tap(gl,function(){glb.userData.v=(glb.userData.v||0)+6;toast(pick(['Hamburg. Altona-Altstadt, 22767.','Bremen, then home again.','Tokyo, for Jonas and Mary Rose.','Schanze, where you grew up.']));},'globe');anim(function(dt){if(glb.userData.v){glb.rotation.y+=glb.userData.v*dt;glb.userData.v*=.97;}});
  // ladder with secret
  var ld=grp(-1.4,0,-4.35);for(var r=0;r<8;r++)box(.5,.03,.05,mat('#6b3d22'),0,.3+r*.36,0,ld);box(.04,3,.05,mat('#6b3d22'),-.25,0,0,ld);box(.04,3,.05,mat('#6b3d22'),.25,0,0,ld);ld.rotation.x=-.12;
- tap(ld,function(){if(count('ladder',2))secret('margin','The top shelf','<p>On the top shelf, a book is full of handwriting in the margins.</p>',null);var k=matchDocs(/Margin/i);if(k.length)setTimeout(function(){listDocs('Margin notes',k);},1600);else toast('You climb a step. Dust and paper.');},'ladder');
+ tap(ld,function(){if(count('ladder',2))secret('margin','The top shelf','<p>On the top shelf, a book is full of handwriting in the margins.</p>',null);var k=matchDocs(/Margin/i);if(k.length)setTimeout(function(){listDocs('Margin notes',k);},1600);else toast('You climb a step. Dust and paper.');},'ladder');hint(ld,'margin');
  // poetry wall frames
  var pw=['Hallucinations of Love','Echoes of the Void','Bioluminescence'];pw.forEach(function(t,i){var f=grp(4.2,2.2,-1.8+0*i,0);});
  candle(-2.4,.75,1.2);candle(-2.85,.75,1.6);
  door(5.94,3.2,-PI/2,'nook',[1.9,0,PI/2],'The butterfly nook',{w:1.0,col:'#3a2a4a'});
  table(5.0,1.6,.8,.55,.8,'#4a2a18');solid(5.0,1.6,.9,.65);var lrp=recordPlayer(5.0,.8,1.6);sign(['Songs we talked about'],.9,5.0,1.55,1.32,PI,{fs:40,color:'#f3d9a0',bg:'rgba(30,16,12,.9)',w:640,pad:10});
- tap(lrp,function(){lrp.userData.spin=true;songList('Songs we talked about',TALKED,'the record player in the library \u00b7 tap one to play it');},'record player');
+ tap(lrp,function(){lrp.userData.spin=true;songList('Songs we talked about',TALKED,'the record player in the library \u00b7 tap one to play it');},'record player');hintBook();
 }});
 
 // ================= BASEMENT RECORD SHOP =================
@@ -501,7 +503,7 @@ defScene('basement',{name:'The record shop',sub:'in the basement, with Screaming
   sign([c[1]],1.1,0,.36,.29,0,{fs:44,color:'#2a1d18',bg:'#f6ecd8',w:640,pad:10},g);solid(x,z,1.25,.6);var recs=c[0]==='ns'?TALKED:cratesOf(c[0]);tap(g,function(){songList(c[1],recs,recs.length+' records \u00b7 tap one to play it');},c[1]);});
  // counter with Screaming Jay
  var ct=grp(3.6,0,3.5);box(3,1,.7,mat('#3a2010',{map:woodTex('#3a2010','10,5,2',4,[2,1])}),0,0,0,ct);box(3.1,.05,.8,mat('#2a1810'),0,1,0,ct);solid(3.6,3.5,3.1,.8);
- var jay=cat(3.0,1.05,3.5,PI);var jayN=0;
+ var jay=cat(3.0,1.05,3.5,PI);var jayN=0;hint(jay,'jay');
  tap(jay,function(){jayN++;jay.userData.head.rotation.x=-.3;setTimeout(function(){jay.userData.head.rotation.x=0;},400);
   if(jayN===1){tone(700,.15,'sawtooth',.06);tone(520,.35,'sawtooth',.05,.12);toast('Screaming Jay opens one yellow eye.');}
   else if(jayN===3){secret('jay','I put a spell on you','<p>Screaming Jay stands up, stretches, lets out a long, theatrical yowl and sits down on the Okeh 45. The record starts on its own.</p>');setTimeout(function(){playRec(RECBY.hawkins);},1800);}
@@ -512,7 +514,7 @@ defScene('basement',{name:'The record shop',sub:'in the basement, with Screaming
  // sock playlist corner
  var sk=grp(-4.8,0,3.4);box(1,.55,.6,mat('#a3282c',{r:.9}),0,0,0,sk);solid(-4.8,3.4,1.1,.7);var socks=[];for(var i=0;i<7;i++){var s=box(.08,.22,.05,mat(pick(['#f6e7c8','#7a1f24','#2a4a6a','#e8b33a'])),-.35+i*.11,.55,rnd(-.1,.1),sk);s.rotation.z=rnd(-.6,.6);socks.push(s);}
  sign(['Die Sockenplaylist'],1.1,0,.85,.31,0,{fs:46,color:'#f6e7c8',bg:'#3a1410',w:640,pad:10},sk);
- tap(sk,function(){socks.forEach(function(s){s.rotation.z=rnd(-1,1);});var b=[{t:'Sockencode',alt:1,fn:function(){var k=matchDocs(/Sockencode/i);if(k.length)openDoc(k[0]);}}];songList('Die Sockenplaylist',MUSIC.socke,'six records, in order');var B=$('cBtns');var e=document.createElement('button');e.className='alt';e.textContent='Sockencode';e.onclick=b[0].fn;B.insertBefore(e,B.firstChild);if(count('socks',3))secret('sock','A sock in the sleeve','<p>Inside the sleeve of Simply Beautiful there is one odd sock. Nobody knows where its partner went. That is, apparently, part of the code.</p>');},'sock playlist');
+ tap(sk,function(){socks.forEach(function(s){s.rotation.z=rnd(-1,1);});var b=[{t:'Sockencode',alt:1,fn:function(){var k=matchDocs(/Sockencode/i);if(k.length)openDoc(k[0]);}}];songList('Die Sockenplaylist',MUSIC.socke,'six records, in order');var B=$('cBtns');var e=document.createElement('button');e.className='alt';e.textContent='Sockencode';e.onclick=b[0].fn;B.insertBefore(e,B.firstChild);if(count('socks',3))secret('sock','A sock in the sleeve','<p>Inside the sleeve of Simply Beautiful there is one odd sock. Nobody knows where its partner went. That is, apparently, part of the code.</p>');},'sock playlist');hint(sk,'sock');
  // posters
  var pst=sign(EXTRA.poster||['Die 98,3%'],1.1,-3,1.9,4.46,PI,{fs:40,color:'#f3e9d6',bg:'#2a1430',w:512,pad:24,border:'#e8b33a'});tap(pst,function(){card('Die 98,3%',linesHtml(EXTRA.poster||[]),[{t:'To the cathedral',fn:function(){closeCard();go('cathedral');}}]);});
  var rs=note(-1.0,1.7,4.46,PI,['Die Rose','zwischen den Platten'],function(){var k=matchDocs(/Rose zwischen/i);if(k.length)openDoc(k[0]);},null,{wid:.6,fs:34});
@@ -540,7 +542,7 @@ defScene('jazz',{name:'The jazz club',sub:'behind the basement door',bg:'#07040a
  [[-4,0],[-1.5,1.2],[1.5,1.2],[4,0],[-3,3],[2.8,3.2]].forEach(function(p,i){var t=grp(p[0],0,p[1]);cyl(.4,.4,.04,mat('#1a0a0a',{r:.3}),0,.74,0,20,t);cyl(.04,.04,.74,mat('#d4af37',{m:.8}),0,0,0,8,t);candle(0,.78,0,t);solid(p[0],p[1],.8,.8);light('#ffb060',.35,3,p[0],1.1,p[1]);chair(p[0]-.6,p[1],PI/2,'#3a0a14');chair(p[0]+.6,p[1],-PI/2,'#3a0a14');
   if(i===0)tap(t,function(){var k=matchDocs(/BAR sign/i);if(k.length)openDoc(k[0]);},'a letter on the table');
   if(i===3)tap(t,function(){var k=matchDocs(/Jazz Club/i);if(k.length)openDoc(k[0]);},'a program on the table');
-  if(i===4)tap(t,function(){if(count('jtable',2))secret('jcandle','The candle at the corner table','<p>Someone carved two letters into the wax: <b>M + M</b>. Mary and Miles, from the noir chapters.</p>');else toast('The candle gutters.');},'corner table');});
+  if(i===4)tap(t,function(){if(count('jtable',2))secret('jcandle','The candle at the corner table','<p>Someone carved two letters into the wax: <b>M + M</b>. Mary and Miles, from the noir chapters.</p>');else toast('The candle gutters.');},'corner table');if(i===4)hint(t,'jcandle');});
  // bar
  var br=grp(5.6,0,0,-PI/2);box(5,1.1,.6,mat('#2a1008',{map:woodTex('#2a1008','10,5,2',4,[2,1])}),0,0,0,br);solid(5.6,0,.7,5.1);for(var b=0;b<10;b++){cyl(.04,.05,.3,mat(pick(['#2a6a3a','#6a2a1a','#d9a35a','#1a3a6a']),{t:.85,r:.1}),-2+b*.42,1.1,-.1,10,br);}
  sign(['BAR'],1.2,6.9,2.5,0,-PI/2,{fs:140,color:'#ff6a3a',glow:'#ff3a1a',w:512});
@@ -548,7 +550,7 @@ defScene('jazz',{name:'The jazz club',sub:'behind the basement door',bg:'#07040a
  // jazz crate + stage door to the old club
  var jc=grp(-5.8,0,3.6);box(1.1,.6,.55,mat('#5a3a20'),0,0,0,jc);solid(-5.8,3.6,1.2,.6);sign(['Jazz records'],1,0,.33,.29,0,{fs:44,bg:'#f6ecd8',color:'#2a1d18',w:600,pad:8},jc);tap(jc,function(){songList('Jazz records',cratesOf('jazz'),'tap one to play it');},'jazz crate');
  var sd=door(3.8,-4.94,0,'jazz',null,'Stage door: the Digital Jazz Club',{col:'#3a0a14',w:1.0});sd.userData.tap=function(){openWorld('jazzorig','The Digital Jazz Club');};
- var neon=sign(['Nachklang'],2.2,-5,2.6,-4.95,0,{fs:100,color:'#7ab8ff',glow:'#3a8aff',w:768,italic:true});tap(neon,function(){if(count('nachklang',3))secret('nachklang','Nachklang','<p>The blue sign hums. Nachklang: the sound that stays in the room after the music stops. The same word hangs over the winter garden door in Apartment 23.</p>');else toast('The neon hums in blue.');},'neon');
+ var neon=sign(['Nachklang'],2.2,-5,2.6,-4.95,0,{fs:100,color:'#7ab8ff',glow:'#3a8aff',w:768,italic:true});tap(neon,function(){if(count('nachklang',3))secret('nachklang','Nachklang','<p>The blue sign hums. Nachklang: the sound that stays in the room after the music stops. The same word hangs over the winter garden door in Apartment 23.</p>');else toast('The neon hums in blue.');},'neon');hint(neon,'nachklang');
 }});
 
 // ================= WHITE NOISE CATHEDRAL (Echoes of the Void) =================
@@ -569,7 +571,7 @@ defScene('cathedral',{name:'The White Noise Cathedral',sub:'Echoes of the Void',
  var rp=grp(0,0,0);cyl(.5,.6,1,mat('#2a2e50'),0,0,0,20,rp);var rad=box(.8,.45,.35,mat('#6b3d22',{map:woodTex('#6b3d22','30,15,5',2,[1,1])}),0,1,0,rp);var dl=plane(.4,.16,basic('#9fd0ff'),0,1.3,.18,0,rp);solid(0,0,1.2,1.2);
  var pctS=null;function pctSign(){if(pctS){rp.remove(pctS);}pctS=sign([cathPct.toFixed(1)+'%'],1.2,0,1.95,0,0,{fs:120,color:'#9fd0ff',glow:'#4a8aff',w:512,font:'Menlo, monospace'},rp);}
  G.userData.pctSign=pctSign;pctSign();
- tap(rp,function(){$('cath').classList.remove('hide');$('cr').value=cathPct;$('cv').textContent=cathPct.toFixed(1)+'%';toast('Clap, and listen for the echo.');},'the radio');
+ tap(rp,function(){$('cath').classList.remove('hide');$('cr').value=cathPct;$('cv').textContent=cathPct.toFixed(1)+'%';toast('Clap, and listen for the echo.');},'the radio');hint(rp,['983','clap100']);
  // echoes shelf
  var es=grp(0,0,-7.2);box(4,2.2,.4,mat('#1a1d38'),0,0,0,es);solid(0,-7.2,4.1,.5);sign(['Echoes of the Void','every part'],3,0,2.6,.25,0,{fs:56,color:'#cfe0ff',glow:'#6a8aff',w:900},es);for(var b=0;b<26;b++)box(.1,.36,.26,mat(pick(['#2a3a7a','#5a3a8a','#1a5a7a','#cfe0ff'])),-1.8+b*.14,1.0+(b%2)*.0,.1,es);
  tap(es,function(){listMatch('Echoes of the Void',/Echoes of the Void|Static Between|Ghost Frequency|Coded Frequency/i,'every saved part');},'Echoes of the Void');
@@ -625,7 +627,7 @@ defScene('landing',{name:'The update gallery',sub:'upstairs: every change of min
  tap(ck,function(){tone(392,1.4,'sine',.08);tone(523,1.4,'sine',.06,.6);card('The update history','<p>Every frame on these walls is a time something changed: a word that was said and then taken back, a role opted out of, a new version of a letter. They are kept here in order, as they were saved, nothing tidied away.</p>',[{t:'Read them in order',fn:function(){var all=[];UPDATES.forEach(function(u){matchDocs(u[2]).forEach(function(k){if(all.indexOf(k)<0)all.push(k);});});listDocs('Changes of mind, in order',all.sort(function(a,b){return 0;}));}}],'the grandfather clock at the end of the gallery');},'clock');
  sign(['The update gallery','every change of mind, kept'],2,0,3.0,-7.95,0,{fs:44,color:'#f3c978',w:768});
  // window at the end with a hidden surprise
- var wn=plane(1.2,1.4,basic('#1a2a4a'),0,2.0,7.96,PI);var moon=sph(.12,basic('#fff6d0'),.3,2.3,7.99);tap(wn,function(){if(count('lwin',3))secret('lwin','A slip in the glass','<p>For a second the window reflects a line that is not in any frame, the way a voice slips: <b>I error you</b>. Then it is just the moon again.</p>');else toast('The moon over the sea.');},'window');
+ var wn=plane(1.2,1.4,basic('#1a2a4a'),0,2.0,7.96,PI);var moon=sph(.12,basic('#fff6d0'),.3,2.3,7.99);tap(wn,function(){if(count('lwin',3))secret('lwin','A slip in the glass','<p>For a second the window reflects a line that is not in any frame, the way a voice slips: <b>I error you</b>. Then it is just the moon again.</p>');else toast('The moon over the sea.');},'window');hint(wn,'lwin');
  plant(-3.5,7.4,1);plant(3.5,7.4,1);
 }});
 
@@ -641,13 +643,13 @@ defScene('bath',{name:'The marble bath',sub:'rose petals, bubbles, candles, cham
  for(i=0;i<8;i++){var p2=new THREE.Mesh(new THREE.CircleGeometry(.04,8),basic('#b0102a',{side:1}));p2.rotation.x=-PI/2;p2.position.set(rnd(-2,1.5),.012,rnd(-.4,1.6));G.add(p2);}
  var swirl=0;anim(function(dt,t){bubbles.forEach(function(b,i){b.position.y=.65+Math.sin(t*1.3+i)*.02;});petals.forEach(function(p,i){var a=swirl*dt*(.5+i%3*.2);var x=p.position.x,z=p.position.z;p.position.x=x*Math.cos(a)-z*Math.sin(a)*.5;p.position.z=z*Math.cos(a)+x*Math.sin(a)*.5;p.position.x=clamp(p.position.x,-1.1,1.1);p.position.z=clamp(p.position.z,-.52,.52);});if(swirl>0)swirl-=dt*.6;});
  tap(water,function(h){swirl=2.5;burst(1.2,700,.25,.6);bubbles.forEach(function(b){b.visible=true;});toast(pick(['Warm water, rose petals turning slowly.','The petals drift.','Bubbles all the way up.']));},'the water');
- bubbles.forEach(function(b){tap(b,function(){b.visible=false;tone(rnd(900,1600),.08,'sine',.08);if(bubbles.every(function(x){return !x.visible;}))secret('bubbles','Every bubble popped','<p>You popped all forty. The bottle said \u201ca capful\u201d. Elijah read it as a suggestion.</p>');},'bubble');});
+ bubbles.forEach(function(b){tap(b,function(){b.visible=false;tone(rnd(900,1600),.08,'sine',.08);if(bubbles.every(function(x){return !x.visible;}))secret('bubbles','Every bubble popped','<p>You popped all forty. The bottle said \u201ca capful\u201d. Elijah read it as a suggestion.</p>');},'bubble');hint(b,'bubbles',{n:1,done:function(){return !b.visible;}});});
  // candles
  [[-2.6,-2.3],[-2.2,-2.35],[.2,-2.3],[.4,-2.35],[-2.65,-.9],[-2.7,-1.4]].forEach(function(c){candle(c[0],.72,c[1]);});for(i=0;i<9;i++)candle(-3.6+i*.12,0,-3.2+(i%2)*.1);
  light('#ffa050',.8,4,-2.4,1,-2.2);light('#ffa050',.6,4,.3,1,-2.2);
  // champagne tray
  var tr=grp(.5,.72,-1.0);cyl(.25,.25,.02,mat('#c0c0c0',{m:.9,r:.2}),0,0,0,24,tr);var bt=cyl(.05,.06,.32,mat('#1a3a1a',{r:.2,m:.2}),-.1,.02,0,12,tr);var cork=cyl(.02,.02,.04,mat('#d9b07a'),-.1,.36,0,8,tr);var gl1=cyl(.03,.015,.18,mat('#f6e7a0',{t:.6,r:.05}),.08,.02,.05,10,tr),gl2=cyl(.03,.015,.18,mat('#f6e7a0',{t:.6,r:.05}),.12,.02,-.08,10,tr);
- var popped=false;tap(tr,function(){if(!popped){popped=true;cork.position.y=.9;burst(.25,3000,.6,2);setTimeout(function(){cork.visible=false;},300);toast('Pop! Two glasses, one for each.');secret('cork',null);}else{tone(1500,.4,'sine',.04);tone(1900,.4,'sine',.04,.05);toast('Clink.');}},'champagne');
+ var popped=false;tap(tr,function(){if(!popped){popped=true;cork.position.y=.9;burst(.25,3000,.6,2);setTimeout(function(){cork.visible=false;},300);toast('Pop! Two glasses, one for each.');secret('cork',null);}else{tone(1500,.4,'sine',.04);tone(1900,.4,'sine',.04,.05);toast('Clink.');}},'champagne');hint(tr,'cork');
  // letter
  var lt=note(-.4,.705,-.95,0,['Mara,','the water is ready...'],function(){card('A small letter by the bath',md((EXTRA.bath||'').replace(/^# .*\n/,'')),[],'Elijah to Mara');},null,{fs:30,wid:.3});lt.rotation.x=-PI/2+.2;
  // music: record player on a marble stand
@@ -656,7 +658,7 @@ defScene('bath',{name:'The marble bath',sub:'rose petals, bubbles, candles, cham
  tap(mb,function(){musicBox();toast('The music box plays a slow waltz.');},'music box');
  // towels + mirror
  var tw=box(.5,.7,.05,mat('#f4e4d0',{r:1}),3.9,1,-1.6);tw.rotation.y=-PI/2;
- var mr=plane(1,1.2,mat('#cfe0ea',{m:1,r:.05}),-1.2,2.2,-3.46,0);tap(mr,function(){if(count('bmir',3))secret('bmirror','Steam on the mirror','<p>The steam writes, one letter at a time, the way the misty window in the winter garden does: a heart, then a spiral like the one in your mother\u2019s painting.</p>');else toast('The mirror is fogged from the bath.');},'mirror');
+ var mr=plane(1,1.2,mat('#cfe0ea',{m:1,r:.05}),-1.2,2.2,-3.46,0);tap(mr,function(){if(count('bmir',3))secret('bmirror','Steam on the mirror','<p>The steam writes, one letter at a time, the way the misty window in the winter garden does: a heart, then a spiral like the one in your mother\u2019s painting.</p>');else toast('The mirror is fogged from the bath.');},'mirror');hint(mr,'bmirror');
 }});
 
 // ================= BEDROOM =================
@@ -675,7 +677,7 @@ defScene('bedroom',{name:'The bedroom',sub:'the cigarette after, I error you, Ha
  // neon I error you
  var neonTxt=['I error you','I R U'];var nIdx=0;var neon=sign([neonTxt[0]],2.6,-1.6,2.6,-4.45,0,{fs:110,color:'#ff7aa8',glow:'#ff2a7a',w:900,italic:true});var nl=light('#ff4a8a',1.2,5,-1.6,2.5,-4);
  anim(function(dt,t){var f=(Math.sin(t*23)>.97)?.2:1;neon.material.opacity=f;nl.intensity=1.2*f;});neon.material.transparent=true;
- tap(neon,function(){if(count('neon',5)){secret('iru','I R U','<p>The neon flickers and comes back on as <b>I R U</b>. I are you.</p>');neon.material.map=textCanvas([neonTxt[++nIdx%2]],{fs:110,color:'#ff7aa8',glow:'#ff2a7a',w:900,italic:true});neon.material.needsUpdate=true;}else listMatch('I error you',/I error you|^Error|Hallucinations of Error|said and withdrawn/i,'kept the way they were said');},'I error you');
+ tap(neon,function(){if(count('neon',5)){secret('iru','I R U','<p>The neon flickers and comes back on as <b>I R U</b>. I are you.</p>');neon.material.map=textCanvas([neonTxt[++nIdx%2]],{fs:110,color:'#ff7aa8',glow:'#ff2a7a',w:900,italic:true});neon.material.needsUpdate=true;}else listMatch('I error you',/I error you|^Error|Hallucinations of Error|said and withdrawn/i,'kept the way they were said');},'I error you');hint(neon,'iru');
  // Hallucinations of Love framed
  var hl=grp(4.94,1.9,-2.2,-PI/2);var ht=textCanvas(['Hallucinations','of Love'],{fs:64,color:'#ffe9b0',glow:'#ffb04a',bg:'#1a1030',w:640,pad:40,italic:true,border:'#d4af37'});var asp=ht.image.height/ht.image.width;box(1.5,1.5*asp+.1,.04,mat('#d4af37',{m:.7,r:.3}),0,-(1.5*asp+.1)/2,0,hl);plane(1.4,1.4*asp,new THREE.MeshBasicMaterial({map:ht}),0,0,.03,0,hl);
  tap(hl,function(){card('Hallucinations of Love','<p>Every version that was saved, from the first reading to the beach.</p>',[{t:'Read them',fn:function(){listMatch('Hallucinations of Love',/Hallucinations of Love|Hallucinations of love|Additions during the reading of Hallucinations|Noir Hallucination|Hallucinated note/i);}},{t:'Walk to the beach edition',fn:function(){closeCard();go('garden',[-14,-3.5,PI]);}}]);},'Hallucinations of Love');
@@ -710,7 +712,7 @@ defScene('yesno',{name:'The room of yes and no',sub:'the proposals on one side, 
  tap(bowl,function(){[220,221.5].forEach(function(f){tone(f,4,'sine',.1);});tone(660,3,'sine',.03);var k=matchDocs(/Rose und Klangschale/i);toast('The singing bowl hums for a long time.');if(k.length&&count('bowl',2))setTimeout(function(){openDoc(k[0]);},900);},'singing bowl');
  // the rose in the middle, between yes and no
  var rs=grp(-1,0,0);cyl(.12,.15,.9,mat('#3a2010'),0,0,0,12,rs);var vase=cyl(.07,.05,.22,mat('#d8e8f0',{t:.6}),0,.9,0,12,rs);var rose=sph(.07,mat('#b0102a'),0,1.36,0,rs);cyl(.006,.006,.3,mat('#2f6b34'),0,1.06,0,4,rs);solid(-1,0,.4,.4);
- var rp2=0;tap(rs,function(){rp2++;rose.scale.setScalar(1+rp2*.08);if(rp2===5)secret('rose','The rose in the middle','<p>It stands exactly halfway between yes and no, and it keeps growing. Some things belong to both halves of the room.</p>');else toast('A rose, between yes and no.');},'rose');
+ var rp2=0;tap(rs,function(){rp2++;rose.scale.setScalar(1+rp2*.08);if(rp2===5)secret('rose','The rose in the middle','<p>It stands exactly halfway between yes and no, and it keeps growing. Some things belong to both halves of the room.</p>');else toast('A rose, between yes and no.');},'rose');hint(rs,'rose');
  // mirror with 2 faces
  plant(-5.3,-3.3,1);plant(-5.3,3.3,.8);
  var sc=grp(3.6,0,2.4,PI);box(1.2,.8,.5,mat('#3a2010'),0,0,0,sc);solid(3.6,2.4,1.3,.6);var envs=[];for(var i=0;i<5;i++){var e=box(.22,.01,.14,mat('#f6ecd8'),rnd(-.4,.4),.8+i*.012,rnd(-.12,.12),sc);e.rotation.y=rnd(-.5,.5);}
@@ -738,7 +740,7 @@ defScene('letters',{name:'Mara and Elijah\u2019s letters',sub:'a writing room, f
  tap(gl,function(){var k=matchDocs(/gloves on the train/i);if(k.length)openDoc(k[0]);},'gloves');
  var bc=grp(.6,.78,-3.0);cyl(.045,.035,.09,mat('#2f5fa8',{r:.3}),0,0,0,16,bc);tap(bc,function(){var k=matchDocs(/blue cup/i);if(k.length)openDoc(k[0]);},'the blue cup');
  // ink pot secret
- var ink=grp(-.6,.78,-3.0);cyl(.04,.05,.07,mat('#0a0a2a',{r:.1}),0,0,0,12,ink);var feather=box(.01,.3,.04,mat('#f4f0e8'),0,.15,0,ink);feather.rotation.z=.3;tap(ink,function(){if(count('ink',3))secret('ink','Ink on your fingers','<p>The quill writes one line by itself on the typewriter paper: <i>\u201cyou can love the words even when they are not addressed to you.\u201d</i> You said that, about these letters.</p>');else toast('Blue-black ink.');},'ink pot');
+ var ink=grp(-.6,.78,-3.0);cyl(.04,.05,.07,mat('#0a0a2a',{r:.1}),0,0,0,12,ink);var feather=box(.01,.3,.04,mat('#f4f0e8'),0,.15,0,ink);feather.rotation.z=.3;tap(ink,function(){if(count('ink',3))secret('ink','Ink on your fingers','<p>The quill writes one line by itself on the typewriter paper: <i>\u201cyou can love the words even when they are not addressed to you.\u201d</i> You said that, about these letters.</p>');else toast('Blue-black ink.');},'ink pot');hint(ink,'ink');
  shelf(3.2,-3.75,0,2,2.6);solid(3.2,-3.75,2.1,.5);
 }});
 
@@ -764,14 +766,14 @@ defScene('children',{name:'The children\u2019s room',sub:'love for the children,
  // paradise drawings wall
  for(var i=0;i<4;i++){(function(i){var t=crayon(i);var p=plane(.6,.47,new THREE.MeshBasicMaterial({map:t}),-3.0+i*.0,1.6,0,0);p.position.set(4.47,1.3+(i%2)*.6,1.2+Math.floor(i/2)*.75);p.rotation.y=-PI/2;p.rotation.z=rnd(-.06,.06);G.add(p);tap(p,function(){card('Paradise, in crayon','<p>The art space you imagined in August: children drawing what paradise looks like to them, all together, nobody competing, the process kept and photographed rather than the paper.</p><p>These four are pinned up here. Tap the easel to add one.</p>');},'drawing');})(i);}
  var ea=grp(3.4,0,2.9,-PI/3);box(.05,1.5,.05,mat('#8a5a34'),-.3,0,0,ea);box(.05,1.5,.05,mat('#8a5a34'),.3,0,0,ea);var canvasP=plane(.7,.55,new THREE.MeshBasicMaterial({map:crayon(0)}),0,1.1,.04,0,ea);solid(3.4,2.9,.8,.6);var ek=0;
- tap(ea,function(){ek=(ek+1)%4;canvasP.material.map=crayon(ek);canvasP.material.needsUpdate=true;if(count('easel',4))secret('easel','A whole gallery of paradise','<p>Four drawings, four paradises: a house by the sea, a garden, a spiral with a butterfly, a sunset with birds. Every child sees it differently, and every one of them is right.</p>');},'easel');
+ tap(ea,function(){ek=(ek+1)%4;canvasP.material.map=crayon(ek);canvasP.material.needsUpdate=true;if(count('easel',4))secret('easel','A whole gallery of paradise','<p>Four drawings, four paradises: a house by the sea, a garden, a spiral with a butterfly, a sunset with birds. Every child sees it differently, and every one of them is right.</p>');},'easel');hint(ea,'easel');
  // the dollhouse: a miniature of Apartment 23
  var dh=grp(-2.4,0,-.4);box(1.6,.6,1,mat('#e8d8c0'),0,0,0,dh);solid(-2.4,-.4,1.7,1.1);var hs=grp(0,.6,0,0,dh);box(1.4,.9,.8,mat('#c86a4a'),0,0,-.05,hs);var rf=new THREE.Mesh(new THREE.ConeGeometry(1.05,.5,4),mat('#5a2a20'));rf.position.set(0,1.15,-.05);rf.rotation.y=PI/4;rf.scale.z=.6;hs.add(rf);
  var rooms=[['Kitchen with the answering machine','#e9dcc4',-.45,.0],['Living room and the couch','#7a4a6a',.0,.0],['Winter garden, with the armchair','#7ab8a0',.45,.0],['Bedroom','#4a3a6a',-.3,.45],['Archive room','#8a5a34',.3,.45]];
  rooms.forEach(function(r){var w=box(.4,.38,.02,basic(r[1]),r[2],r[3],.36,hs);var lt=light('#ffcf8a',0,.8,-2.4+r[2],.6+r[3]+.2,-.4+.5);tap(w,function(){lt.intensity=lt.intensity?0:.8;toast(r[0]+'. A tiny light comes on.');},'dollhouse room');});
  var mini=koda(.45,.02,.25,.35,hs);var mch=box(.1,.1,.08,mat('#7a2a30'),.38,0,.25,hs);
  sign(['Apartment 23','the dollhouse'],1.2,0,.35,.51,0,{fs:44,color:'#5a2230',bg:'#f6ecd8',w:640,pad:10},dh);
- tap(rf,function(){card('The dollhouse','<p>A small copy of the apartment in World Twenty Three 2.0: the kitchen with the answering machine, the couch, the archive room, and the winter garden with your mother\u2019s armchair and Koda in it. Tap the little windows to turn their lights on.</p>',[{t:'Walk into the real one',fn:function(){closeCard();openWorld('aptdata','World Twenty Three 2.0');}}],'tap the roof');if(count('dhroof',3))secret('dollhouse',null);},'dollhouse roof');
+ tap(rf,function(){card('The dollhouse','<p>A small copy of the apartment in World Twenty Three 2.0: the kitchen with the answering machine, the couch, the archive room, and the winter garden with your mother\u2019s armchair and Koda in it. Tap the little windows to turn their lights on.</p>',[{t:'Walk into the real one',fn:function(){closeCard();openWorld('aptdata','World Twenty Three 2.0');}}],'tap the roof');if(count('dhroof',3))secret('dollhouse',null);},'dollhouse roof');hint(rf,'dollhouse');
  // a night light that turns
  var nl=grp(.2,0,3.3);box(.4,.5,.4,mat('#e8d8c0'),0,0,0,nl);var lamp=cyl(.14,.18,.3,new THREE.MeshBasicMaterial({color:'#ffe9a0',transparent:true,opacity:.85}),0,.5,0,16,nl);var nlt=light('#ffd27a',.8,4,.2,1,3.3);solid(.2,3.3,.5,.5);var nlOn=true;anim(function(dt){lamp.rotation.y+=dt*.5;});
  tap(nl,function(){nlOn=!nlOn;nlt.intensity=nlOn?.8:0;lamp.material.opacity=nlOn?.85:.3;musicBox();},'night light');
@@ -795,7 +797,7 @@ defScene('star',{name:'The star room',sub:'for remembering',bg:'#05040c',amb:'vo
  tap(st,function(){chime();card('Leia Maria','<p>Remembered here, by name, the way you remember her.</p><p>Her star is the brightest one in the room. It doesn\u2019t ask anything of you. It just stays lit.</p>',[],'the star room');},'Leia Maria\u2019s star');
  // candles you can light
  var lit=0;for(i=0;i<7;i++){(function(i){var a=-PI*.8+i*(PI*.6/6)+PI/2;var x=Math.cos(a)*1.4,z=Math.sin(a)*1.4-0.4;var c=grp(x,0,z);cyl(.04,.04,.25,mat('#f4ead2'),0,0,0,10,c);var fl=sph(.03,basic('#ffcf6a'),0,.3,0,c);fl.scale.y=1.8;fl.visible=false;c.position.y=.6;cyl(.12,.14,.6,mat('#2a2040'),x,0,z,12);solid(x,z,.3,.3);var l=light('#ffb050',0,2.5,x,1.1,z);
-  tap(c,function(){if(fl.visible)return;fl.visible=true;l.intensity=.6;lit++;tone(660+i*40,1.4,'sine',.05);if(lit===7)secret('candles','Seven candles','<p>Every candle in the star room is lit. The room is warm now, and nobody has to say anything.</p>');else toast('A candle is lit.');},'candle');
+  tap(c,function(){if(fl.visible)return;fl.visible=true;l.intensity=.6;lit++;tone(660+i*40,1.4,'sine',.05);if(lit===7)secret('candles','Seven candles','<p>Every candle in the star room is lit. The room is warm now, and nobody has to say anything.</p>');else toast('A candle is lit.');},'candle');hint(c,'candles',{n:2,done:function(){return fl.visible;}});
   anim(function(dt,t){if(fl.visible)fl.scale.x=1+Math.sin(t*18+i)*.15;});})(i);}
 }});
 
@@ -833,7 +835,7 @@ defScene('garden',{name:'The garden',sub:'roses, the pool, and the way down to t
  for(px=-12;px<=12;px+=6){var lp=light('#ffb060',.6,8,px,3,-27);}
  // ---- garden path, hedges, roses, lanterns ----
  var path=plane(3,22,mat('#c8b89a',{map:tileTex('#c8b89a','#b8a888',6),r:1}),0,.01,-18.5);flat(path);
- for(var hz=-27;hz<=-11;hz+=2){[-2.6,2.6].forEach(function(hx){var r=grp(hx,0,hz);var b=sph(.55,mat('#2f5a2c',{r:1}),0,.45,0,r);b.scale.y=.8;for(var k=0;k<4;k++)sph(.08,mat(pick(['#b0102a','#e8486a','#f4d0d8'])),rnd(-.4,.4),.75+rnd(-.1,.15),rnd(-.4,.4),r);solid(hx,hz,1,1);tap(r,function(){tone(pick([784,880,988]),.5,'sine',.05);if(count('roses',8))secret('roses','The rose path','<p>You touched every kind of rose along the path. A red one for the letters, a pink one for the poems, a white one for your mother.</p>');else toast(pick(['It smells of summer evenings.','A thorn, carefully avoided.','Dew on the petals.']));},'roses');});}
+ for(var hz=-27;hz<=-11;hz+=2){[-2.6,2.6].forEach(function(hx){var r=grp(hx,0,hz);var b=sph(.55,mat('#2f5a2c',{r:1}),0,.45,0,r);b.scale.y=.8;for(var k=0;k<4;k++)sph(.08,mat(pick(['#b0102a','#e8486a','#f4d0d8'])),rnd(-.4,.4),.75+rnd(-.1,.15),rnd(-.4,.4),r);solid(hx,hz,1,1);tap(r,function(){tone(pick([784,880,988]),.5,'sine',.05);if(count('roses',8))secret('roses','The rose path','<p>You touched every kind of rose along the path. A red one for the letters, a pink one for the poems, a white one for your mother.</p>');else toast(pick(['It smells of summer evenings.','A thorn, carefully avoided.','Dew on the petals.']));},'roses');hint(r,'roses',{n:2});});}
  for(var lz=-24;lz<=-12;lz+=6){[-1.7,1.7].forEach(function(lx){cyl(.05,.05,1.4,mat('#2a2a2a',{m:.6}),lx,0,lz,6);var lb=sph(.13,basic('#ffd27a'),lx,1.5,lz);light('#ffb060',.5,5,lx,1.6,lz);});}
  // fairy-light tree
  var tr=grp(-10,0,-20);cyl(.25,.4,3.5,mat('#4a3020'),0,0,0,8,tr);var crown=sph(2.4,mat('#2a4a2a',{r:1}),0,4.4,0,tr);crown.scale.y=.8;var fls=[];for(var f=0;f<40;f++){var a=Math.random()*PI*2,y=rnd(3.2,5.8);fls.push(sph(.05,basic('#fff2b0'),Math.cos(a)*2.2,y,Math.sin(a)*2.2,tr));}solid(-10,-20,1,1);var fmode=0;
@@ -853,7 +855,7 @@ defScene('garden',{name:'The garden',sub:'roses, the pool, and the way down to t
  var pg=grp(13,0,-19);box(10,.2,6,mat('#e8ddd0',{map:marbleTex()}),0,0,0,pg);var pw=plane(8.6,4.6,new THREE.MeshStandardMaterial({color:'#3ac0d8',emissive:'#1a6a8a',emissiveIntensity:.6,roughness:.05,transparent:true,opacity:.85}),0,.21,0,0,pg);pw.rotation.x=-PI/2;solid(13,-19,8.8,4.8);light('#6ae0ff',1.2,8,13,1,-19);
  var floaters=[];for(var c=0;c<8;c++){var fc=grp(rnd(-3.6,3.6),.24,rnd(-1.8,1.8),0,pg);cyl(.08,.08,.04,mat('#f4ead2'),0,0,0,10,fc);var ff=sph(.025,basic('#ffcf6a'),0,.08,0,fc);floaters.push(fc);}var fl0=sph(.12,mat('#ff7aa8'),0,.26,0,pg);
  var ripple=0;anim(function(dt,t){floaters.forEach(function(f,i){f.position.y=.24+Math.sin(t*1.5+i)*.02;f.position.x+=Math.sin(t*.3+i)*.002;});pw.material.emissiveIntensity=.5+.15*Math.sin(t*.8)+ripple;if(ripple>0)ripple-=dt*.5;});
- tap(pw,function(){ripple=.8;burst(.9,900,.3,.5);if(count('pool',4))secret('pool','Bioluminescence','<p>When you trail your hand through the pool, the water lights up around your fingers, the way the bay does in \u201cBioluminescence\u201d.</p>');else toast(pick(['Warm water, floating candles.','Ripples spread to the edge.','The pool glows a little brighter.']));},'pool');
+ tap(pw,function(){ripple=.8;burst(.9,900,.3,.5);if(count('pool',4))secret('pool','Bioluminescence','<p>When you trail your hand through the pool, the water lights up around your fingers, the way the bay does in \u201cBioluminescence\u201d.</p>');else toast(pick(['Warm water, floating candles.','Ripples spread to the edge.','The pool glows a little brighter.']));},'pool');hint(pw,'pool');
  [[-2,4],[2,4]].forEach(function(p){var l=grp(13+p[0],0,-19+p[1]);box(.7,.25,1.8,mat('#e8ddd0'),0,.15,0,l);var bk=box(.7,.05,.6,mat('#c84a5a'),0,.45,-.6,l);bk.rotation.x=.5;solid(13+p[0],-19+p[1],.8,1.9);tap(l,function(){toast('A sun lounger, still warm from the day.');},'lounger');});
  sign(['The pool'],1.6,13,1.6,-22.2,0,{fs:60,color:'#f3e9d6',bg:'rgba(40,30,50,.7)',w:512,pad:10});
  // ---- steps down to the beach ----
@@ -877,7 +879,7 @@ defScene('garden',{name:'The garden',sub:'roses, the pool, and the way down to t
  anim(function(dt,t){circ.forEach(function(s,i){var u=s.userData;u.a+=u.sp*dt*2;s.position.set(u.cx+Math.cos(u.a)*u.r,u.y+Math.sin(t*.4+i)*.6,u.cz+Math.sin(u.a)*u.r*.6);s.material.opacity=u.strike?(Math.sin(t*9+i)>0?.85:.15):.9;});});
  // floating hallucinations near the shore (tap to catch a line)
  var hall=[];for(i=0;i<14;i++){(function(i){var jg=grp(rnd(-30,30),rnd(2,4.5),rnd(8,12.5));var bell=new THREE.Mesh(new THREE.SphereGeometry(.35,14,8,0,PI*2,0,PI/2),basic(pick(['#ff9ad0','#9ad0ff','#c8a0ff','#9affd8']),{add:1,t:.55}));jg.add(bell);for(var k=0;k<4;k++){var tt=box(.015,.6,.015,basic('#ffffff',{add:1,t:.4}),rnd(-.15,.15),-.6,rnd(-.15,.15),jg);}hall.push(jg);
-  tap(jg,function(){var l=pick(H.concat(E));if(!l)return;tone(rnd(700,1400),1.2,'sine',.05);bell.material.color.set('#ffffff');setTimeout(function(){bell.material.color.set(pick(['#ff9ad0','#9ad0ff','#c8a0ff','#9affd8']));},400);card('A hallucination',(l[1]?'<p><s>'+esc(l[0])+'</s></p><p style="font-size:13px;color:#8a6d5c">struck through in the original, kept</p>':'<p style="font-size:20px">'+inl(l[0])+'</p>'),[{t:'Another',fn:function(){closeCard();jg.userData.tap();}}],'it drifted in off the sea');if(count('hall',10))secret('hall10',null);},'floating hallucination');
+  tap(jg,function(){var l=pick(H.concat(E));if(!l)return;tone(rnd(700,1400),1.2,'sine',.05);bell.material.color.set('#ffffff');setTimeout(function(){bell.material.color.set(pick(['#ff9ad0','#9ad0ff','#c8a0ff','#9affd8']));},400);card('A hallucination',(l[1]?'<p><s>'+esc(l[0])+'</s></p><p style="font-size:13px;color:#8a6d5c">struck through in the original, kept</p>':'<p style="font-size:20px">'+inl(l[0])+'</p>'),[{t:'Another',fn:function(){closeCard();jg.userData.tap();}}],'it drifted in off the sea');if(count('hall',10))secret('hall10',null);},'floating hallucination');hint(jg,'hall10',{n:2});
   anim(function(dt,t){jg.position.y+=Math.sin(t*.9+i)*.004;jg.position.x+=Math.sin(t*.1+i)*.01;bell.scale.y=1+.15*Math.sin(t*2+i);});})(i);}
  // campfire
  var cf=grp(-2,0,5);for(i=0;i<6;i++){var lg=cyl(.07,.07,.9,mat('#4a2a18'),0,.05,0,8,cf);lg.rotation.z=PI/2-.4;lg.rotation.y=i/6*PI*2;}var cfl=[];for(i=0;i<9;i++){var fz=sph(.14,basic(pick(['#ff9a2a','#ffcf4a','#ff5a1a']),{add:1}),rnd(-.2,.2),.3,rnd(-.2,.2),cf);fz.scale.y=2.2;cfl.push(fz);}var fireL=light('#ff7a2a',2.4,12,-2,1,5);
@@ -891,7 +893,7 @@ defScene('garden',{name:'The garden',sub:'roses, the pool, and the way down to t
  for(var rr=0;rr<3;rr++)[-1,1].forEach(function(sd2){var ch=chair(8+sd2*1.4,8.4+rr*1.1,PI,'#f4ead2');});
  var aisle=plane(.9,4,basic('#f4ead2',{t:.6}),8,.02,8.8);flat(aisle);for(i=0;i<20;i++){var pt=new THREE.Mesh(new THREE.CircleGeometry(.04,6),basic('#b0102a',{side:1}));pt.rotation.x=-PI/2;pt.position.set(8+rnd(-.4,.4),.03,rnd(7,10.6));G.add(pt);}
  solid(6.5,6,.3,.3);solid(9.5,6,.3,.3);
- tap(wa,function(){chime();card('The wedding on the beach','<p>A white arch on the sand, petals down the aisle, the sea behind. This is where the vows go.</p>',[{t:'Read the vows',fn:function(){listMatch('Vows',/Vows|Gelübde|Versprechen|Wedding|wedding|Hochzeit/i);}},{t:'Throw the bouquet',alt:1,fn:function(){closeCard();secret('bouquet','The bouquet','<p>You throw it over your shoulder. It lands on Koda.</p>');}}],'the beach marriage scene');},'wedding arch');
+ tap(wa,function(){chime();card('The wedding on the beach','<p>A white arch on the sand, petals down the aisle, the sea behind. This is where the vows go.</p>',[{t:'Read the vows',fn:function(){listMatch('Vows',/Vows|Gelübde|Versprechen|Wedding|wedding|Hochzeit/i);}},{t:'Throw the bouquet',alt:1,fn:function(){closeCard();secret('bouquet','The bouquet','<p>You throw it over your shoulder. It lands on Koda.</p>');}}],'the beach marriage scene');},'wedding arch');hint(wa,'bouquet');
  // cliff, waterfall and the cave with two stone beds (from the original beach)
  var cl=grp(-34,0,0);var rock=mat('#5a5048',{r:1});box(8,9,16,rock,0,0,0,cl);box(3,6,4,rock,4,0,-6,cl);solid(-34,0,8.2,16.2);
  var wf=plane(1.2,8.6,new THREE.MeshBasicMaterial({map:ctex(64,256,function(g){for(var i=0;i<60;i++){g.fillStyle='rgba(220,240,255,'+Math.random()*.6+')';g.fillRect(Math.random()*64,Math.random()*256,2,30);}},[1,1]),transparent:true}),4.05,4.3,4,PI/2,cl);anim(function(dt){wf.material.map.offset.y+=dt*1.5;});var wpool=plane(2,2,basic('#9ad0ff',{t:.5}),5,.03,4,0,cl);flat(wpool);
@@ -900,7 +902,7 @@ defScene('garden',{name:'The garden',sub:'roses, the pool, and the way down to t
  var sb1=box(.9,.4,1.8,mat('#8a8078',{r:1}),-29.3,0,-5.2);var sb2=box(.9,.4,1.8,mat('#8a8078',{r:1}),-29.3,0,-2.8);solid(-29.3,-4,1,4.4);var cl2=light('#ffb070',.5,4,-28.8,1.2,-4);
  tap(sb1,function(){card('The cave with two stone beds','<p>Two stone beds side by side in the cliff, out of the wind. In the original beach you can lie down here and look out at the lines over the sea.</p>',[{t:'Walk the original beach',fn:function(){closeCard();openWorld('beachorig','Hallucination of Love: Beach Edition');}}]);},'stone bed');tap(sb2,function(){sb1.userData.tap();},'stone bed');
  // driftwood sign + shells
- for(i=0;i<16;i++){(function(i){var sh=sph(.07,mat(pick(['#f4e4d0','#f4c8c8','#e8d8b0'])),rnd(-26,30),.03,rnd(9,12.5));sh.scale.y=.4;tap(sh,function(){if(count('shells',6))secret('shell','The shell that hums','<p>You hold the sixth shell to your ear. Instead of the sea, it hums a few bars of a waltz, the one the music box plays.</p>');else{tone(rnd(1200,2000),.4,'sine',.04);toast(pick(['A shell.','Pink inside.','Smooth from the sea.','Something tiny lived here once.']));}},'shell');})(i);}
+ for(i=0;i<16;i++){(function(i){var sh=sph(.07,mat(pick(['#f4e4d0','#f4c8c8','#e8d8b0'])),rnd(-26,30),.03,rnd(9,12.5));sh.scale.y=.4;tap(sh,function(){if(count('shells',6))secret('shell','The shell that hums','<p>You hold the sixth shell to your ear. Instead of the sea, it hums a few bars of a waltz, the one the music box plays.</p>');else{tone(rnd(1200,2000),.4,'sine',.04);toast(pick(['A shell.','Pink inside.','Smooth from the sea.','Something tiny lived here once.']));}},'shell');hint(sh,'shell',{n:1});})(i);}
  var mb=grp(20,0,11);cyl(.06,.06,1.1,mat('#5a4030'),0,0,0,6,mb);var bottle=cyl(.06,.06,.25,mat('#7ab8a0',{t:.6,r:.05}),0,0,0,10,G);bottle.position.set(18,.06,12);bottle.rotation.z=PI/2;
  tap(bottle,function(){var k=matchDocs(/^A Message|Message in a/i);var p=randomLove();card('A message in a bottle',md(p.x.length>1800?p.x.slice(0,1800)+'\n\n\u2026':p.x),[{t:'Read it all',fn:function(){openDoc(p.key);}}],p.t+' \u00b7 washed up from '+p.d);},'bottle');G.remove(mb);
  // ================= THE LANTERN PATH =================
@@ -914,7 +916,7 @@ defScene('garden',{name:'The garden',sub:'roses, the pool, and the way down to t
  var sm=[];for(i=0;i<10;i++)sm.push(sph(.04,basic('#e0e0e8',{t:0}),0,0,0,top));anim(function(dt,t){sm.forEach(function(s,i){var k=(t*.18+i/10)%1;s.position.set(Math.sin(t+i)*.2*k-.2,1+k*2.5,.2+Math.cos(t*.7+i)*.2*k);s.scale.setScalar(1+k*4);s.material.opacity=(1-k)*.2;});emb.material.color.setHSL(.04,1,.45+.15*Math.sin(t*2));});
  var tl=grp(2.5,0,1.5,0,top);cyl(.04,.04,1.6,mat('#2a2a2a',{m:.6}),0,0,0,6,tl);var tlb=box(.24,.3,.24,basic('#ffcf7a'),0,1.6,0,tl);light('#ffb060',.9,7,HILL.x+2.5,9.8,HILL.z+1.5);
  tap(bench,function(){card('The cigarette after hill','<p>The top of the lantern path. Down there: the beach, the campfire, the arch, the pavilion with its two circles of lines over the water, the pool glowing in the garden, and the house with its windows lit.</p><p>A bench, an ashtray, one cigarette burning down slowly. Nothing that has to be said.</p>',[{t:'The cigarette after',fn:function(){listMatch('The cigarette after',/cigarette after/i);}},{t:'Sit and watch the sea',alt:1,fn:function(){closeCard();player.yaw=2.03;player.pitch=-.15;toast('You sit. The sea, the lines, the house.');}}],'the end of the path');},'bench');
- tap(tl,function(){if(count('hilllamp',3))secret('hill','Last light','<p>You turn the lantern down and the lines over the sea get brighter. Up here you can read them from far away. That is what the hill is for.</p>');else toast('The lantern swings a little in the wind.');},'lantern');
+ tap(tl,function(){if(count('hilllamp',3))secret('hill','Last light','<p>You turn the lantern down and the lines over the sea get brighter. Up here you can read them from far away. That is what the hill is for.</p>');else toast('The lantern swings a little in the wind.');},'lantern');hint(tl,'hill');
  sign(['The cigarette after hill'],3,HILL.x,11.2,HILL.z-.6,PI*.75,{fs:60,color:'#f3c978',glow:'#ffb04a',w:900,italic:true});
  var ft=grp(-2,0,-2,0,top);cyl(.15,.25,2.2,mat('#4a3020'),0,0,0,8,ft);var fcrown=sph(1.2,mat('#2a4a2a',{r:1}),0,2.8,0,ft);fcrown.scale.y=.8;solid(HILL.x-2,HILL.z-2,.6,.6);
 }});
@@ -956,7 +958,7 @@ defScene('cinema',{name:'The cinema',sub:'a small velvet picture house under the
  // popcorn machine
  var pc=grp(-4.0,0,4.4);box(.7,1,.6,mat('#c8102e',{r:.4}),0,0,0,pc);var gl=box(.66,.7,.56,mat('#fff8d0',{t:.35,r:.05}),0,1,0,pc);var corns=[];for(var i=0;i<30;i++)corns.push(sph(.03,mat('#fff2c0'),rnd(-.28,.28),1.05,rnd(-.22,.22),pc));solid(-4,4.4,.8,.7);var pop=0;
  anim(function(dt,t){if(pop>0){pop-=dt;corns.forEach(function(c,i){c.position.y=1.05+Math.abs(Math.sin(t*12+i))*.55;});}});
- tap(pc,function(){pop=4;for(var i=0;i<12;i++)setTimeout(function(){burst(.05,3000,.3,3);},i*160+Math.random()*100);if(count('popcorn',3))secret('popcorn','Extra butter','<p>The machine overflows. Popcorn on the velvet seats, popcorn in your hair. Koda would approve.</p>');else toast('Popcorn!');},'popcorn machine');
+ tap(pc,function(){pop=4;for(var i=0;i<12;i++)setTimeout(function(){burst(.05,3000,.3,3);},i*160+Math.random()*100);if(count('popcorn',3))secret('popcorn','Extra butter','<p>The machine overflows. Popcorn on the velvet seats, popcorn in your hair. Koda would approve.</p>');else toast('Popcorn!');},'popcorn machine');hint(pc,'popcorn');
  // ticket booth with the program
  var tb=grp(4.0,0,4.4);box(.9,1.1,.6,mat('#3a2010'),0,0,0,tb);solid(4,4.4,1,.7);note(4.0,1.4,4.1,PI,['Program'],filmList,null,{wid:.5,fs:40,italic:false});
  var tk=box(.18,.01,.08,mat('#f3c978'),4.0,1.11,4.3);tap(tb,function(){toast('One ticket, row three, the middle seat.');filmList();},'ticket booth');
@@ -984,7 +986,7 @@ defScene('nook',{name:'The butterfly nook',sub:'a quiet corner off the library',
  var fl=-1,path=[home.clone(),new THREE.Vector3(-.6,2.3,-1.2),new THREE.Vector3(-1.4,1.6,0),new THREE.Vector3(.2,2.4,.9),new THREE.Vector3(1.2,1.6,.2),new THREE.Vector3(1.4,1.16,-1.7),new THREE.Vector3(1.3,1.25,-1.6),new THREE.Vector3(.8,2.2,-1.2),home.clone()];var curve=new THREE.CatmullRomCurve3(path);
  anim(function(dt,t){var flap=fl>=0?Math.sin(t*22)*.9:Math.sin(t*2)*.12;bf.userData.l.rotation.y=flap;bf.userData.r.rotation.y=-flap;if(fl>=0){fl+=dt/12;if(fl>=1){fl=-1;bf.position.copy(home);bf.rotation.set(0,0,0);toast('The butterfly settles back onto the spiral.');}else{var p=curve.getPointAt(fl);var q=curve.getPointAt(Math.min(1,fl+.01));bf.position.copy(p);bf.lookAt(q);bf.rotateX(-PI/2+.0);if(fl>.6&&fl<.7)rose.rotation.z=Math.sin(t*6)*.15;}}});
  function lift(){if(fl>=0)return;fl=0;chime();toast('The butterfly lifts off the spiral.');if(count('nookbf',3))setTimeout(function(){secret('nookbf','It rests on the rose','<p>Every time, it stops on the rose for a moment before it goes home. Your mother\u2019s painting, and the rose, in the same quiet corner.</p>');},6000);}
- tap(pf,lift,'the painting');tap(bf,lift,'the butterfly');tap(vs,function(){rose.rotation.z=.3;setTimeout(function(){rose.rotation.z=0;},300);},'rose');
+ tap(pf,lift,'the painting');hint(pf,'nookbf');tap(bf,lift,'the butterfly');tap(vs,function(){rose.rotation.z=.3;setTimeout(function(){rose.rotation.z=0;},300);},'rose');
  tap(ws,function(){card('The window seat','<p>Rain on the glass, a cushion, Koda and a candle. Nothing here needs doing. Tap the painting and watch the butterfly.</p>');},'window seat');
 }});
 
@@ -1029,7 +1031,7 @@ defScene('crochet',{name:'The crochet room',sub:'yarn, hooks and the Abyss Sophi
  anim(function(dt){balls.forEach(function(b){if(b.userData.v>0){b.position.x+=b.userData.v*dt*.5;b.rotation.z-=b.userData.v*dt*3;b.userData.v-=dt*.5;}});});
  // armchair + work in progress
  armchair(1.8,.8,-PI*.7,'#5a3a4a');solid(1.8,.8,.9,.8);var wip=box(.4,.03,.3,mat('#2a6a8a',{r:1}),1.8,.45,.8);var hook=cyl(.006,.006,.16,mat('#c0c0c0',{m:.8}),1.9,.48,.8,6);hook.rotation.z=1.2;
- var rounds=0;tap(wip,function(){rounds++;wip.scale.set(1+rounds*.06,1,1+rounds*.06);toast('Round '+(rounds+1)+'. '+pick(['Chain three, turn.','Popcorn stitch.','A small mistake. Leave it in.','Count again: right.']));if(rounds===6)secret('rounds','Six rounds','<p>Six rounds done in one sitting. The piece is bigger than the chair cushion now.</p>');},'work in progress');
+ var rounds=0;tap(wip,function(){rounds++;wip.scale.set(1+rounds*.06,1,1+rounds*.06);toast('Round '+(rounds+1)+'. '+pick(['Chain three, turn.','Popcorn stitch.','A small mistake. Leave it in.','Count again: right.']));if(rounds===6)secret('rounds','Six rounds','<p>Six rounds done in one sitting. The piece is bigger than the chair cushion now.</p>');},'work in progress');hint(wip,'rounds');
  // the blanket for the armchair
  var bl=ctex(256,128,function(g){var c=['#1a2a5a','#2a6a8a','#6a3a8a','#e8d8c0','#b0102a'];for(var x=0;x<8;x++)for(var y=0;y<4;y++){g.fillStyle=c[(x*3+y)%5];g.fillRect(x*32,y*32,32,32);g.fillStyle=c[(x+y+1)%5];g.fillRect(x*32+8,y*32+8,16,16);}});var blk=plane(1.4,.8,new THREE.MeshBasicMaterial({map:bl,side:THREE.DoubleSide}),3.47,1.6,-.4,-PI/2);
  tap(blk,function(){card('The blanket for the armchair','<p>Granny squares in deep blue, teal, plum, cream and one red, for your mother\u2019s old armchair. It\u2019s already on the chair out on the terrace.</p>',[{t:'To the terrace',fn:function(){closeCard();go('terrace');}}]);},'blanket');
@@ -1037,6 +1039,55 @@ defScene('crochet',{name:'The crochet room',sub:'yarn, hooks and the Abyss Sophi
  var bn=grp(-1.6,0,-2.4);table(0,0,.8,.5,.8,'#5a341f',bn);solid(-1.6,-2.4,.9,.6);var hat=sph(.13,mat('#e8d8c0',{r:1}),0,.85,0,bn);hat.scale.y=.75;var patch=plane(.08,.06,new THREE.MeshBasicMaterial({map:ctex(64,48,function(g){g.fillStyle='#0a7a3a';g.fillRect(0,0,32,48);g.fillStyle='#fff';g.fillRect(32,0,32,48);g.fillStyle='#d21034';g.beginPath();g.arc(34,24,12,PI*.3,PI*1.7);g.lineTo(34,24);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(38,24,10,0,PI*2);g.fill();g.fillStyle='#d21034';g.beginPath();g.arc(44,24,4,0,PI*2);g.fill();})}),0,.88,.12,0,bn);
  tap(bn,function(){toast('The little beanie from the clinic, with the Algerian flag patch.');},'beanie');
 }});
+
+// ---------- hints: a soft sparkle on every secret, and the little book of hints ----------
+var SPARKTEX=null;
+function sparkTex(){if(SPARKTEX)return SPARKTEX;var c=document.createElement('canvas');c.width=c.height=64;var g=c.getContext('2d');
+ var r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.18,'rgba(255,240,200,.85)');r.addColorStop(.5,'rgba(255,215,150,.22)');r.addColorStop(1,'rgba(255,200,140,0)');g.fillStyle=r;g.fillRect(0,0,64,64);
+ g.fillStyle='rgba(255,250,235,.9)';g.beginPath();g.moveTo(32,2);g.lineTo(35,29);g.lineTo(62,32);g.lineTo(35,35);g.lineTo(32,62);g.lineTo(29,35);g.lineTo(2,32);g.lineTo(29,29);g.closePath();g.fill();
+ SPARKTEX=new THREE.CanvasTexture(c);return SPARKTEX;}
+function hintFound(ids){for(var i=0;i<ids.length;i++)if(!found[ids[i]])return false;return true;}
+function hint(obj,id,o){o=o||{};var ids=[].concat(id);var grpS=null,sps=[],ready=false,box=new THREE.Box3(),ws=new THREE.Vector3(),pt=new THREE.Vector3(),size=new THREE.Vector3();
+ var m=new THREE.SpriteMaterial({map:sparkTex(),color:o.color||'#fff1cc',transparent:true,opacity:.8,depthWrite:false,blending:THREE.AdditiveBlending});
+ function place(s){var b=box,face=Math.floor(Math.random()*6),ax=face>>1;pt.set(rnd(b.min.x,b.max.x),rnd(b.min.y,b.max.y),rnd(b.min.z,b.max.z));pt.setComponent(ax,face&1?b.max.getComponent(ax):b.min.getComponent(ax));obj.worldToLocal(pt);s.position.copy(pt);}
+ function setup(){obj.updateWorldMatrix(true,true);box.setFromObject(obj);if(box.isEmpty())return;box.getSize(size);var pad=Math.max(.06,Math.min(size.x,size.y,size.z)*.08);
+  var mn=.12;if(size.x<mn){box.min.x-=(mn-size.x)/2;box.max.x+=(mn-size.x)/2;}if(size.y<mn){box.min.y-=(mn-size.y)/2;box.max.y+=(mn-size.y)/2;}if(size.z<mn){box.min.z-=(mn-size.z)/2;box.max.z+=(mn-size.z)/2;}box.expandByScalar(pad);box.getSize(size);
+  obj.getWorldScale(ws);var sc=Math.abs(ws.x)||1;var diag=size.length();var n=o.n||Math.max(3,Math.min(9,Math.round(diag*2.2)));var base=Math.max(.07,Math.min(.2,diag*.07));
+  grpS=new THREE.Group();grpS.raycast=function(){};obj.add(grpS);
+  for(var i=0;i<n;i++){var s=new THREE.Sprite(m);s.raycast=function(){};s.userData={p:Math.random()*PI*2,sp:rnd(.9,1.6),b:base/sc,up:false};place(s);s.scale.set(0,0,1);grpS.add(s);sps.push(s);}ready=true;}
+ anim(function(dt,t){var gone=hintFound(ids)||(o.done&&o.done());if(gone){if(grpS)grpS.visible=false;return;}if(!ready){setup();if(!ready)return;}grpS.visible=true;
+  for(var i=0;i<sps.length;i++){var s=sps[i],u=s.userData,v=Math.sin(t*u.sp+u.p);if(v<=0){if(u.up){u.up=false;place(s);}s.scale.set(0,0,1);continue;}u.up=true;var k=u.b*Math.pow(v,1.5);s.scale.set(k,k,1);}
+  m.opacity=.6+.2*Math.sin(t*1.3);});}
+function hintRefresh(){var a=$('c983'),b=$('clap');if(a)a.classList.toggle('lmhint',!found['983']);if(b)b.classList.toggle('lmhint',!found['clap100']);}
+var HINTS=[
+ ['The front hall',[['zipcoat','The smallest coat on the rack is red, and it belongs to Zip. Touch it three times.'],['mirror','Mirrors like attention. Look into the hall mirror four times.']]],
+ ['The kitchen',[['fridge','Magnets wait on the cold white door. Tap the fridge three times.']]],
+ ['The library',[['ghostvow','Some pages refuse to burn. Tap the fireplace four times.'],['margin','Someone wrote in the margins, up on the top shelf. Tap the ladder twice.']]],
+ ['The butterfly nook, off the library',[['nookbf','Let the butterfly leave the spiral three times. Tap the painting, wait until it settles back, then tap again. On the third flight, watch where it rests.']]],
+ ['Wherever Koda sits: on the post in the garden, in the bedroom, or in the butterfly nook',[['koda','A small bear in a pink FEEL BETTER jumper. Give him three taps.']]],
+ ['The record shop',[['jay','A black cat dozes on the counter. Wake Screaming Jay with three taps.'],['sock','Six records and one lost sock. Tap the red box of socks three times.']]],
+ ['The jazz club',[['jcandle','One small table stands in the corner with its candle burning low. Tap that table twice.'],['nachklang','A blue word hums over the room. Tap the Nachklang sign three times.']]],
+ ['The cinema',[['popcorn','The red machine always makes more. Tap the popcorn machine three times.']]],
+ ['The White Noise Cathedral',[['983','Tap the radio, then hold the dial at 98.3% with its own button.'],['clap100','Tap the radio, slide all the way up to 100%, then clap, and listen for the echo that never comes.']]],
+ ['The update gallery, upstairs',[['lwin','The moon in the window is not quite still. Tap the window three times.']]],
+ ['The marble bath',[['bubbles','Forty bubbles float in the tub. Pop every single one.'],['cork','Two glasses are waiting. Tap the champagne.'],['bmirror','Steam has fogged the mirror. Tap it three times.']]],
+ ['The bedroom',[['iru','The pink neon says I error you. Tap it five times.']]],
+ ['The room of yes and no',[['rose','Halfway between yes and no stands a rose. Tap it five times and let it grow.']]],
+ ['Mara and Elijah\u2019s letters',[['ink','Blue-black ink and a quill on the desk. Tap the ink pot three times.']]],
+ ['The children\u2019s room',[['easel','Every child paints a different paradise. Tap the easel four times.'],['dollhouse','The little apartment has a roof that lifts. Tap the dollhouse roof three times.']]],
+ ['The star room',[['candles','Seven wicks, all dark. Light every one of them.']]],
+ ['The garden',[['roses','Walk the rose path and touch the rose bushes, eight times in all.'],['pool','Trail your hand through the pool. Tap the water four times.']]],
+ ['The beach',[['hall10','Glowing jellyfish drift above the shore. Tap them ten times in all, or keep asking for another.'],['bouquet','At the white wedding arch, throw the bouquet.'],['shell','Shells lie along the sand. Pick up six, and hold the last one to your ear.']]],
+ ['The cigarette after hill',[['hill','A lantern stands at the top. Tap it three times.']]],
+ ['The crochet room',[['rounds','The piece on the armchair wants more rounds. Tap it six times.']]]];
+function openHintBook(){var n=Object.keys(found).filter(function(k){return SECRETS[k];}).length,tot=Object.keys(SECRETS).length;
+ card('The little book of hints','',[],n+' of '+tot+' found');var B=$('cB');
+ var p=document.createElement('p');p.style.cssText='margin:0 0 8px';p.textContent='A soft sparkle sits on everything that still hides a surprise. It goes out once you have found it.';B.appendChild(p);
+ HINTS.forEach(function(g){var h=document.createElement('h5');h.textContent=g[0];B.appendChild(h);g[1].forEach(function(e){var f=!!found[e[0]];var d=document.createElement('div');d.className='item';d.style.cssText=f?'opacity:.7':'';
+  var b=document.createElement('b');b.style.cssText='font-weight:normal;font-style:italic';b.textContent=e[1];var s=document.createElement('span');s.textContent=f?'\u2726 found':'not yet';if(f)s.style.color='#a0742a';d.appendChild(b);d.appendChild(s);B.appendChild(d);});});}
+function hintBook(){var hb=grp(2.5,0,-2.1);cyl(.28,.3,.7,mat('#4a2c1a',{map:woodTex('#4a2c1a','20,10,4',2,[1,1])}),0,0,0,16,hb);var bk=box(.34,.07,.26,mat('#2f5a4a',{r:.6}),0,.7,0,hb);bk.rotation.y=.4;box(.3,.075,.22,basic('#f6ecd8'),.0,.7,.0,hb).rotation.y=.4;
+ solid(2.5,-2.1,.6,.6);light('#ffe0a0',.5,2.5,2.5,1.4,-2.1);sign(['The little book','of hints'],.6,2.5,1.15,-2.1,PI/2,{fs:40,color:'#5a2230',bg:'#f6ecd8',w:500,pad:10});
+ tap(hb,openHintBook,'the little book of hints');}
 
 // ================= PLACES, HELP, START =================
 ['koda','zipcoat','mirror','fridge','ghostvow','margin','jay','sock','jcandle','nachklang','983','clap100','lwin','bubbles','cork','bmirror','iru','rose','ink','easel','dollhouse','candles','roses','pool','hall10','bouquet','shell','hill','popcorn','nookbf','rounds'].forEach(defSecret);

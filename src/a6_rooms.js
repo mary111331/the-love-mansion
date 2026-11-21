@@ -21,7 +21,7 @@ defScene('yesno',{name:'The room of yes and no',sub:'the proposals on one side, 
  tap(bowl,function(){[220,221.5].forEach(function(f){tone(f,4,'sine',.1);});tone(660,3,'sine',.03);var k=matchDocs(/Rose und Klangschale/i);toast('The singing bowl hums for a long time.');if(k.length&&count('bowl',2))setTimeout(function(){openDoc(k[0]);},900);},'singing bowl');
  // the rose in the middle, between yes and no
  var rs=grp(-1,0,0);cyl(.12,.15,.9,mat('#3a2010'),0,0,0,12,rs);var vase=cyl(.07,.05,.22,mat('#d8e8f0',{t:.6}),0,.9,0,12,rs);var rose=sph(.07,mat('#b0102a'),0,1.36,0,rs);cyl(.006,.006,.3,mat('#2f6b34'),0,1.06,0,4,rs);solid(-1,0,.4,.4);
- var rp2=0;tap(rs,function(){rp2++;rose.scale.setScalar(1+rp2*.08);if(rp2===5)secret('rose','The rose in the middle','<p>It stands exactly halfway between yes and no, and it keeps growing. Some things belong to both halves of the room.</p>');else toast('A rose, between yes and no.');},'rose');
+ var rp2=0;tap(rs,function(){rp2++;rose.scale.setScalar(1+rp2*.08);if(rp2===5)secret('rose','The rose in the middle','<p>It stands exactly halfway between yes and no, and it keeps growing. Some things belong to both halves of the room.</p>');else toast('A rose, between yes and no.');},'rose');hint(rs,'rose');
  // mirror with 2 faces
  plant(-5.3,-3.3,1);plant(-5.3,3.3,.8);
  var sc=grp(3.6,0,2.4,PI);box(1.2,.8,.5,mat('#3a2010'),0,0,0,sc);solid(3.6,2.4,1.3,.6);var envs=[];for(var i=0;i<5;i++){var e=box(.22,.01,.14,mat('#f6ecd8'),rnd(-.4,.4),.8+i*.012,rnd(-.12,.12),sc);e.rotation.y=rnd(-.5,.5);}
@@ -49,7 +49,7 @@ defScene('letters',{name:'Mara and Elijah\u2019s letters',sub:'a writing room, f
  tap(gl,function(){var k=matchDocs(/gloves on the train/i);if(k.length)openDoc(k[0]);},'gloves');
  var bc=grp(.6,.78,-3.0);cyl(.045,.035,.09,mat('#2f5fa8',{r:.3}),0,0,0,16,bc);tap(bc,function(){var k=matchDocs(/blue cup/i);if(k.length)openDoc(k[0]);},'the blue cup');
  // ink pot secret
- var ink=grp(-.6,.78,-3.0);cyl(.04,.05,.07,mat('#0a0a2a',{r:.1}),0,0,0,12,ink);var feather=box(.01,.3,.04,mat('#f4f0e8'),0,.15,0,ink);feather.rotation.z=.3;tap(ink,function(){if(count('ink',3))secret('ink','Ink on your fingers','<p>The quill writes one line by itself on the typewriter paper: <i>\u201cyou can love the words even when they are not addressed to you.\u201d</i> You said that, about these letters.</p>');else toast('Blue-black ink.');},'ink pot');
+ var ink=grp(-.6,.78,-3.0);cyl(.04,.05,.07,mat('#0a0a2a',{r:.1}),0,0,0,12,ink);var feather=box(.01,.3,.04,mat('#f4f0e8'),0,.15,0,ink);feather.rotation.z=.3;tap(ink,function(){if(count('ink',3))secret('ink','Ink on your fingers','<p>The quill writes one line by itself on the typewriter paper: <i>\u201cyou can love the words even when they are not addressed to you.\u201d</i> You said that, about these letters.</p>');else toast('Blue-black ink.');},'ink pot');hint(ink,'ink');
  shelf(3.2,-3.75,0,2,2.6);solid(3.2,-3.75,2.1,.5);
 }});
 
@@ -75,14 +75,14 @@ defScene('children',{name:'The children\u2019s room',sub:'love for the children,
  // paradise drawings wall
  for(var i=0;i<4;i++){(function(i){var t=crayon(i);var p=plane(.6,.47,new THREE.MeshBasicMaterial({map:t}),-3.0+i*.0,1.6,0,0);p.position.set(4.47,1.3+(i%2)*.6,1.2+Math.floor(i/2)*.75);p.rotation.y=-PI/2;p.rotation.z=rnd(-.06,.06);G.add(p);tap(p,function(){card('Paradise, in crayon','<p>The art space you imagined in August: children drawing what paradise looks like to them, all together, nobody competing, the process kept and photographed rather than the paper.</p><p>These four are pinned up here. Tap the easel to add one.</p>');},'drawing');})(i);}
  var ea=grp(3.4,0,2.9,-PI/3);box(.05,1.5,.05,mat('#8a5a34'),-.3,0,0,ea);box(.05,1.5,.05,mat('#8a5a34'),.3,0,0,ea);var canvasP=plane(.7,.55,new THREE.MeshBasicMaterial({map:crayon(0)}),0,1.1,.04,0,ea);solid(3.4,2.9,.8,.6);var ek=0;
- tap(ea,function(){ek=(ek+1)%4;canvasP.material.map=crayon(ek);canvasP.material.needsUpdate=true;if(count('easel',4))secret('easel','A whole gallery of paradise','<p>Four drawings, four paradises: a house by the sea, a garden, a spiral with a butterfly, a sunset with birds. Every child sees it differently, and every one of them is right.</p>');},'easel');
+ tap(ea,function(){ek=(ek+1)%4;canvasP.material.map=crayon(ek);canvasP.material.needsUpdate=true;if(count('easel',4))secret('easel','A whole gallery of paradise','<p>Four drawings, four paradises: a house by the sea, a garden, a spiral with a butterfly, a sunset with birds. Every child sees it differently, and every one of them is right.</p>');},'easel');hint(ea,'easel');
  // the dollhouse: a miniature of Apartment 23
  var dh=grp(-2.4,0,-.4);box(1.6,.6,1,mat('#e8d8c0'),0,0,0,dh);solid(-2.4,-.4,1.7,1.1);var hs=grp(0,.6,0,0,dh);box(1.4,.9,.8,mat('#c86a4a'),0,0,-.05,hs);var rf=new THREE.Mesh(new THREE.ConeGeometry(1.05,.5,4),mat('#5a2a20'));rf.position.set(0,1.15,-.05);rf.rotation.y=PI/4;rf.scale.z=.6;hs.add(rf);
  var rooms=[['Kitchen with the answering machine','#e9dcc4',-.45,.0],['Living room and the couch','#7a4a6a',.0,.0],['Winter garden, with the armchair','#7ab8a0',.45,.0],['Bedroom','#4a3a6a',-.3,.45],['Archive room','#8a5a34',.3,.45]];
  rooms.forEach(function(r){var w=box(.4,.38,.02,basic(r[1]),r[2],r[3],.36,hs);var lt=light('#ffcf8a',0,.8,-2.4+r[2],.6+r[3]+.2,-.4+.5);tap(w,function(){lt.intensity=lt.intensity?0:.8;toast(r[0]+'. A tiny light comes on.');},'dollhouse room');});
  var mini=koda(.45,.02,.25,.35,hs);var mch=box(.1,.1,.08,mat('#7a2a30'),.38,0,.25,hs);
  sign(['Apartment 23','the dollhouse'],1.2,0,.35,.51,0,{fs:44,color:'#5a2230',bg:'#f6ecd8',w:640,pad:10},dh);
- tap(rf,function(){card('The dollhouse','<p>A small copy of the apartment in World Twenty Three 2.0: the kitchen with the answering machine, the couch, the archive room, and the winter garden with your mother\u2019s armchair and Koda in it. Tap the little windows to turn their lights on.</p>',[{t:'Walk into the real one',fn:function(){closeCard();openWorld('aptdata','World Twenty Three 2.0');}}],'tap the roof');if(count('dhroof',3))secret('dollhouse',null);},'dollhouse roof');
+ tap(rf,function(){card('The dollhouse','<p>A small copy of the apartment in World Twenty Three 2.0: the kitchen with the answering machine, the couch, the archive room, and the winter garden with your mother\u2019s armchair and Koda in it. Tap the little windows to turn their lights on.</p>',[{t:'Walk into the real one',fn:function(){closeCard();openWorld('aptdata','World Twenty Three 2.0');}}],'tap the roof');if(count('dhroof',3))secret('dollhouse',null);},'dollhouse roof');hint(rf,'dollhouse');
  // a night light that turns
  var nl=grp(.2,0,3.3);box(.4,.5,.4,mat('#e8d8c0'),0,0,0,nl);var lamp=cyl(.14,.18,.3,new THREE.MeshBasicMaterial({color:'#ffe9a0',transparent:true,opacity:.85}),0,.5,0,16,nl);var nlt=light('#ffd27a',.8,4,.2,1,3.3);solid(.2,3.3,.5,.5);var nlOn=true;anim(function(dt){lamp.rotation.y+=dt*.5;});
  tap(nl,function(){nlOn=!nlOn;nlt.intensity=nlOn?.8:0;lamp.material.opacity=nlOn?.85:.3;musicBox();},'night light');
@@ -106,6 +106,6 @@ defScene('star',{name:'The star room',sub:'for remembering',bg:'#05040c',amb:'vo
  tap(st,function(){chime();card('Leia Maria','<p>Remembered here, by name, the way you remember her.</p><p>Her star is the brightest one in the room. It doesn\u2019t ask anything of you. It just stays lit.</p>',[],'the star room');},'Leia Maria\u2019s star');
  // candles you can light
  var lit=0;for(i=0;i<7;i++){(function(i){var a=-PI*.8+i*(PI*.6/6)+PI/2;var x=Math.cos(a)*1.4,z=Math.sin(a)*1.4-0.4;var c=grp(x,0,z);cyl(.04,.04,.25,mat('#f4ead2'),0,0,0,10,c);var fl=sph(.03,basic('#ffcf6a'),0,.3,0,c);fl.scale.y=1.8;fl.visible=false;c.position.y=.6;cyl(.12,.14,.6,mat('#2a2040'),x,0,z,12);solid(x,z,.3,.3);var l=light('#ffb050',0,2.5,x,1.1,z);
-  tap(c,function(){if(fl.visible)return;fl.visible=true;l.intensity=.6;lit++;tone(660+i*40,1.4,'sine',.05);if(lit===7)secret('candles','Seven candles','<p>Every candle in the star room is lit. The room is warm now, and nobody has to say anything.</p>');else toast('A candle is lit.');},'candle');
+  tap(c,function(){if(fl.visible)return;fl.visible=true;l.intensity=.6;lit++;tone(660+i*40,1.4,'sine',.05);if(lit===7)secret('candles','Seven candles','<p>Every candle in the star room is lit. The room is warm now, and nobody has to say anything.</p>');else toast('A candle is lit.');},'candle');hint(c,'candles',{n:2,done:function(){return fl.visible;}});
   anim(function(dt,t){if(fl.visible)fl.scale.x=1+Math.sin(t*18+i)*.15;});})(i);}
 }});

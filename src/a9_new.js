@@ -36,7 +36,7 @@ defScene('cinema',{name:'The cinema',sub:'a small velvet picture house under the
  // popcorn machine
  var pc=grp(-4.0,0,4.4);box(.7,1,.6,mat('#c8102e',{r:.4}),0,0,0,pc);var gl=box(.66,.7,.56,mat('#fff8d0',{t:.35,r:.05}),0,1,0,pc);var corns=[];for(var i=0;i<30;i++)corns.push(sph(.03,mat('#fff2c0'),rnd(-.28,.28),1.05,rnd(-.22,.22),pc));solid(-4,4.4,.8,.7);var pop=0;
  anim(function(dt,t){if(pop>0){pop-=dt;corns.forEach(function(c,i){c.position.y=1.05+Math.abs(Math.sin(t*12+i))*.55;});}});
- tap(pc,function(){pop=4;for(var i=0;i<12;i++)setTimeout(function(){burst(.05,3000,.3,3);},i*160+Math.random()*100);if(count('popcorn',3))secret('popcorn','Extra butter','<p>The machine overflows. Popcorn on the velvet seats, popcorn in your hair. Koda would approve.</p>');else toast('Popcorn!');},'popcorn machine');
+ tap(pc,function(){pop=4;for(var i=0;i<12;i++)setTimeout(function(){burst(.05,3000,.3,3);},i*160+Math.random()*100);if(count('popcorn',3))secret('popcorn','Extra butter','<p>The machine overflows. Popcorn on the velvet seats, popcorn in your hair. Koda would approve.</p>');else toast('Popcorn!');},'popcorn machine');hint(pc,'popcorn');
  // ticket booth with the program
  var tb=grp(4.0,0,4.4);box(.9,1.1,.6,mat('#3a2010'),0,0,0,tb);solid(4,4.4,1,.7);note(4.0,1.4,4.1,PI,['Program'],filmList,null,{wid:.5,fs:40,italic:false});
  var tk=box(.18,.01,.08,mat('#f3c978'),4.0,1.11,4.3);tap(tb,function(){toast('One ticket, row three, the middle seat.');filmList();},'ticket booth');
@@ -64,7 +64,7 @@ defScene('nook',{name:'The butterfly nook',sub:'a quiet corner off the library',
  var fl=-1,path=[home.clone(),new THREE.Vector3(-.6,2.3,-1.2),new THREE.Vector3(-1.4,1.6,0),new THREE.Vector3(.2,2.4,.9),new THREE.Vector3(1.2,1.6,.2),new THREE.Vector3(1.4,1.16,-1.7),new THREE.Vector3(1.3,1.25,-1.6),new THREE.Vector3(.8,2.2,-1.2),home.clone()];var curve=new THREE.CatmullRomCurve3(path);
  anim(function(dt,t){var flap=fl>=0?Math.sin(t*22)*.9:Math.sin(t*2)*.12;bf.userData.l.rotation.y=flap;bf.userData.r.rotation.y=-flap;if(fl>=0){fl+=dt/12;if(fl>=1){fl=-1;bf.position.copy(home);bf.rotation.set(0,0,0);toast('The butterfly settles back onto the spiral.');}else{var p=curve.getPointAt(fl);var q=curve.getPointAt(Math.min(1,fl+.01));bf.position.copy(p);bf.lookAt(q);bf.rotateX(-PI/2+.0);if(fl>.6&&fl<.7)rose.rotation.z=Math.sin(t*6)*.15;}}});
  function lift(){if(fl>=0)return;fl=0;chime();toast('The butterfly lifts off the spiral.');if(count('nookbf',3))setTimeout(function(){secret('nookbf','It rests on the rose','<p>Every time, it stops on the rose for a moment before it goes home. Your mother\u2019s painting, and the rose, in the same quiet corner.</p>');},6000);}
- tap(pf,lift,'the painting');tap(bf,lift,'the butterfly');tap(vs,function(){rose.rotation.z=.3;setTimeout(function(){rose.rotation.z=0;},300);},'rose');
+ tap(pf,lift,'the painting');hint(pf,'nookbf');tap(bf,lift,'the butterfly');tap(vs,function(){rose.rotation.z=.3;setTimeout(function(){rose.rotation.z=0;},300);},'rose');
  tap(ws,function(){card('The window seat','<p>Rain on the glass, a cushion, Koda and a candle. Nothing here needs doing. Tap the painting and watch the butterfly.</p>');},'window seat');
 }});
 
@@ -109,7 +109,7 @@ defScene('crochet',{name:'The crochet room',sub:'yarn, hooks and the Abyss Sophi
  anim(function(dt){balls.forEach(function(b){if(b.userData.v>0){b.position.x+=b.userData.v*dt*.5;b.rotation.z-=b.userData.v*dt*3;b.userData.v-=dt*.5;}});});
  // armchair + work in progress
  armchair(1.8,.8,-PI*.7,'#5a3a4a');solid(1.8,.8,.9,.8);var wip=box(.4,.03,.3,mat('#2a6a8a',{r:1}),1.8,.45,.8);var hook=cyl(.006,.006,.16,mat('#c0c0c0',{m:.8}),1.9,.48,.8,6);hook.rotation.z=1.2;
- var rounds=0;tap(wip,function(){rounds++;wip.scale.set(1+rounds*.06,1,1+rounds*.06);toast('Round '+(rounds+1)+'. '+pick(['Chain three, turn.','Popcorn stitch.','A small mistake. Leave it in.','Count again: right.']));if(rounds===6)secret('rounds','Six rounds','<p>Six rounds done in one sitting. The piece is bigger than the chair cushion now.</p>');},'work in progress');
+ var rounds=0;tap(wip,function(){rounds++;wip.scale.set(1+rounds*.06,1,1+rounds*.06);toast('Round '+(rounds+1)+'. '+pick(['Chain three, turn.','Popcorn stitch.','A small mistake. Leave it in.','Count again: right.']));if(rounds===6)secret('rounds','Six rounds','<p>Six rounds done in one sitting. The piece is bigger than the chair cushion now.</p>');},'work in progress');hint(wip,'rounds');
  // the blanket for the armchair
  var bl=ctex(256,128,function(g){var c=['#1a2a5a','#2a6a8a','#6a3a8a','#e8d8c0','#b0102a'];for(var x=0;x<8;x++)for(var y=0;y<4;y++){g.fillStyle=c[(x*3+y)%5];g.fillRect(x*32,y*32,32,32);g.fillStyle=c[(x+y+1)%5];g.fillRect(x*32+8,y*32+8,16,16);}});var blk=plane(1.4,.8,new THREE.MeshBasicMaterial({map:bl,side:THREE.DoubleSide}),3.47,1.6,-.4,-PI/2);
  tap(blk,function(){card('The blanket for the armchair','<p>Granny squares in deep blue, teal, plum, cream and one red, for your mother\u2019s old armchair. It\u2019s already on the chair out on the terrace.</p>',[{t:'To the terrace',fn:function(){closeCard();go('terrace');}}]);},'blanket');

@@ -15,7 +15,7 @@ defScene('basement',{name:'The record shop',sub:'in the basement, with Screaming
   sign([c[1]],1.1,0,.36,.29,0,{fs:44,color:'#2a1d18',bg:'#f6ecd8',w:640,pad:10},g);solid(x,z,1.25,.6);var recs=c[0]==='ns'?TALKED:cratesOf(c[0]);tap(g,function(){songList(c[1],recs,recs.length+' records \u00b7 tap one to play it');},c[1]);});
  // counter with Screaming Jay
  var ct=grp(3.6,0,3.5);box(3,1,.7,mat('#3a2010',{map:woodTex('#3a2010','10,5,2',4,[2,1])}),0,0,0,ct);box(3.1,.05,.8,mat('#2a1810'),0,1,0,ct);solid(3.6,3.5,3.1,.8);
- var jay=cat(3.0,1.05,3.5,PI);var jayN=0;
+ var jay=cat(3.0,1.05,3.5,PI);var jayN=0;hint(jay,'jay');
  tap(jay,function(){jayN++;jay.userData.head.rotation.x=-.3;setTimeout(function(){jay.userData.head.rotation.x=0;},400);
   if(jayN===1){tone(700,.15,'sawtooth',.06);tone(520,.35,'sawtooth',.05,.12);toast('Screaming Jay opens one yellow eye.');}
   else if(jayN===3){secret('jay','I put a spell on you','<p>Screaming Jay stands up, stretches, lets out a long, theatrical yowl and sits down on the Okeh 45. The record starts on its own.</p>');setTimeout(function(){playRec(RECBY.hawkins);},1800);}
@@ -26,7 +26,7 @@ defScene('basement',{name:'The record shop',sub:'in the basement, with Screaming
  // sock playlist corner
  var sk=grp(-4.8,0,3.4);box(1,.55,.6,mat('#a3282c',{r:.9}),0,0,0,sk);solid(-4.8,3.4,1.1,.7);var socks=[];for(var i=0;i<7;i++){var s=box(.08,.22,.05,mat(pick(['#f6e7c8','#7a1f24','#2a4a6a','#e8b33a'])),-.35+i*.11,.55,rnd(-.1,.1),sk);s.rotation.z=rnd(-.6,.6);socks.push(s);}
  sign(['Die Sockenplaylist'],1.1,0,.85,.31,0,{fs:46,color:'#f6e7c8',bg:'#3a1410',w:640,pad:10},sk);
- tap(sk,function(){socks.forEach(function(s){s.rotation.z=rnd(-1,1);});var b=[{t:'Sockencode',alt:1,fn:function(){var k=matchDocs(/Sockencode/i);if(k.length)openDoc(k[0]);}}];songList('Die Sockenplaylist',MUSIC.socke,'six records, in order');var B=$('cBtns');var e=document.createElement('button');e.className='alt';e.textContent='Sockencode';e.onclick=b[0].fn;B.insertBefore(e,B.firstChild);if(count('socks',3))secret('sock','A sock in the sleeve','<p>Inside the sleeve of Simply Beautiful there is one odd sock. Nobody knows where its partner went. That is, apparently, part of the code.</p>');},'sock playlist');
+ tap(sk,function(){socks.forEach(function(s){s.rotation.z=rnd(-1,1);});var b=[{t:'Sockencode',alt:1,fn:function(){var k=matchDocs(/Sockencode/i);if(k.length)openDoc(k[0]);}}];songList('Die Sockenplaylist',MUSIC.socke,'six records, in order');var B=$('cBtns');var e=document.createElement('button');e.className='alt';e.textContent='Sockencode';e.onclick=b[0].fn;B.insertBefore(e,B.firstChild);if(count('socks',3))secret('sock','A sock in the sleeve','<p>Inside the sleeve of Simply Beautiful there is one odd sock. Nobody knows where its partner went. That is, apparently, part of the code.</p>');},'sock playlist');hint(sk,'sock');
  // posters
  var pst=sign(EXTRA.poster||['Die 98,3%'],1.1,-3,1.9,4.46,PI,{fs:40,color:'#f3e9d6',bg:'#2a1430',w:512,pad:24,border:'#e8b33a'});tap(pst,function(){card('Die 98,3%',linesHtml(EXTRA.poster||[]),[{t:'To the cathedral',fn:function(){closeCard();go('cathedral');}}]);});
  var rs=note(-1.0,1.7,4.46,PI,['Die Rose','zwischen den Platten'],function(){var k=matchDocs(/Rose zwischen/i);if(k.length)openDoc(k[0]);},null,{wid:.6,fs:34});
@@ -54,7 +54,7 @@ defScene('jazz',{name:'The jazz club',sub:'behind the basement door',bg:'#07040a
  [[-4,0],[-1.5,1.2],[1.5,1.2],[4,0],[-3,3],[2.8,3.2]].forEach(function(p,i){var t=grp(p[0],0,p[1]);cyl(.4,.4,.04,mat('#1a0a0a',{r:.3}),0,.74,0,20,t);cyl(.04,.04,.74,mat('#d4af37',{m:.8}),0,0,0,8,t);candle(0,.78,0,t);solid(p[0],p[1],.8,.8);light('#ffb060',.35,3,p[0],1.1,p[1]);chair(p[0]-.6,p[1],PI/2,'#3a0a14');chair(p[0]+.6,p[1],-PI/2,'#3a0a14');
   if(i===0)tap(t,function(){var k=matchDocs(/BAR sign/i);if(k.length)openDoc(k[0]);},'a letter on the table');
   if(i===3)tap(t,function(){var k=matchDocs(/Jazz Club/i);if(k.length)openDoc(k[0]);},'a program on the table');
-  if(i===4)tap(t,function(){if(count('jtable',2))secret('jcandle','The candle at the corner table','<p>Someone carved two letters into the wax: <b>M + M</b>. Mary and Miles, from the noir chapters.</p>');else toast('The candle gutters.');},'corner table');});
+  if(i===4)tap(t,function(){if(count('jtable',2))secret('jcandle','The candle at the corner table','<p>Someone carved two letters into the wax: <b>M + M</b>. Mary and Miles, from the noir chapters.</p>');else toast('The candle gutters.');},'corner table');if(i===4)hint(t,'jcandle');});
  // bar
  var br=grp(5.6,0,0,-PI/2);box(5,1.1,.6,mat('#2a1008',{map:woodTex('#2a1008','10,5,2',4,[2,1])}),0,0,0,br);solid(5.6,0,.7,5.1);for(var b=0;b<10;b++){cyl(.04,.05,.3,mat(pick(['#2a6a3a','#6a2a1a','#d9a35a','#1a3a6a']),{t:.85,r:.1}),-2+b*.42,1.1,-.1,10,br);}
  sign(['BAR'],1.2,6.9,2.5,0,-PI/2,{fs:140,color:'#ff6a3a',glow:'#ff3a1a',w:512});
@@ -62,7 +62,7 @@ defScene('jazz',{name:'The jazz club',sub:'behind the basement door',bg:'#07040a
  // jazz crate + stage door to the old club
  var jc=grp(-5.8,0,3.6);box(1.1,.6,.55,mat('#5a3a20'),0,0,0,jc);solid(-5.8,3.6,1.2,.6);sign(['Jazz records'],1,0,.33,.29,0,{fs:44,bg:'#f6ecd8',color:'#2a1d18',w:600,pad:8},jc);tap(jc,function(){songList('Jazz records',cratesOf('jazz'),'tap one to play it');},'jazz crate');
  var sd=door(3.8,-4.94,0,'jazz',null,'Stage door: the Digital Jazz Club',{col:'#3a0a14',w:1.0});sd.userData.tap=function(){openWorld('jazzorig','The Digital Jazz Club');};
- var neon=sign(['Nachklang'],2.2,-5,2.6,-4.95,0,{fs:100,color:'#7ab8ff',glow:'#3a8aff',w:768,italic:true});tap(neon,function(){if(count('nachklang',3))secret('nachklang','Nachklang','<p>The blue sign hums. Nachklang: the sound that stays in the room after the music stops. The same word hangs over the winter garden door in Apartment 23.</p>');else toast('The neon hums in blue.');},'neon');
+ var neon=sign(['Nachklang'],2.2,-5,2.6,-4.95,0,{fs:100,color:'#7ab8ff',glow:'#3a8aff',w:768,italic:true});tap(neon,function(){if(count('nachklang',3))secret('nachklang','Nachklang','<p>The blue sign hums. Nachklang: the sound that stays in the room after the music stops. The same word hangs over the winter garden door in Apartment 23.</p>');else toast('The neon hums in blue.');},'neon');hint(neon,'nachklang');
 }});
 
 // ================= WHITE NOISE CATHEDRAL (Echoes of the Void) =================
@@ -83,7 +83,7 @@ defScene('cathedral',{name:'The White Noise Cathedral',sub:'Echoes of the Void',
  var rp=grp(0,0,0);cyl(.5,.6,1,mat('#2a2e50'),0,0,0,20,rp);var rad=box(.8,.45,.35,mat('#6b3d22',{map:woodTex('#6b3d22','30,15,5',2,[1,1])}),0,1,0,rp);var dl=plane(.4,.16,basic('#9fd0ff'),0,1.3,.18,0,rp);solid(0,0,1.2,1.2);
  var pctS=null;function pctSign(){if(pctS){rp.remove(pctS);}pctS=sign([cathPct.toFixed(1)+'%'],1.2,0,1.95,0,0,{fs:120,color:'#9fd0ff',glow:'#4a8aff',w:512,font:'Menlo, monospace'},rp);}
  G.userData.pctSign=pctSign;pctSign();
- tap(rp,function(){$('cath').classList.remove('hide');$('cr').value=cathPct;$('cv').textContent=cathPct.toFixed(1)+'%';toast('Clap, and listen for the echo.');},'the radio');
+ tap(rp,function(){$('cath').classList.remove('hide');$('cr').value=cathPct;$('cv').textContent=cathPct.toFixed(1)+'%';toast('Clap, and listen for the echo.');},'the radio');hint(rp,['983','clap100']);
  // echoes shelf
  var es=grp(0,0,-7.2);box(4,2.2,.4,mat('#1a1d38'),0,0,0,es);solid(0,-7.2,4.1,.5);sign(['Echoes of the Void','every part'],3,0,2.6,.25,0,{fs:56,color:'#cfe0ff',glow:'#6a8aff',w:900},es);for(var b=0;b<26;b++)box(.1,.36,.26,mat(pick(['#2a3a7a','#5a3a8a','#1a5a7a','#cfe0ff'])),-1.8+b*.14,1.0+(b%2)*.0,.1,es);
  tap(es,function(){listMatch('Echoes of the Void',/Echoes of the Void|Static Between|Ghost Frequency|Coded Frequency/i,'every saved part');},'Echoes of the Void');

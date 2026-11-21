@@ -7,7 +7,7 @@ def rd(p):
     return open(p, encoding='utf-8').read()
 t = rd(os.path.join(H, 'template.html'))
 parts = {}
-app = ''.join(rd(os.path.join(H, f)) for f in ['a1_core.js', 'a2_engine.js', 'a3_ground.js', 'a4_basement.js', 'a5_upstairs.js', 'a6_rooms.js', 'a7_outdoor.js', 'a9_new.js', 'a8_main.js'])
+app = ''.join(rd(os.path.join(H, f)) for f in ['a1_core.js', 'a2_engine.js', 'a3_ground.js', 'a4_basement.js', 'a5_upstairs.js', 'a6_rooms.js', 'a7_outdoor.js', 'a9_new.js', 'a10_hints.js', 'a8_main.js'])
 love = json.load(open(os.path.join(H, 'txtpieces.json')))
 rep = {
     '__APT__': emb(rd(S + '/world-twenty-three-2.html')),

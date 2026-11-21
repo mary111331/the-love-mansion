@@ -33,7 +33,7 @@ defScene('landing',{name:'The update gallery',sub:'upstairs: every change of min
  tap(ck,function(){tone(392,1.4,'sine',.08);tone(523,1.4,'sine',.06,.6);card('The update history','<p>Every frame on these walls is a time something changed: a word that was said and then taken back, a role opted out of, a new version of a letter. They are kept here in order, as they were saved, nothing tidied away.</p>',[{t:'Read them in order',fn:function(){var all=[];UPDATES.forEach(function(u){matchDocs(u[2]).forEach(function(k){if(all.indexOf(k)<0)all.push(k);});});listDocs('Changes of mind, in order',all.sort(function(a,b){return 0;}));}}],'the grandfather clock at the end of the gallery');},'clock');
  sign(['The update gallery','every change of mind, kept'],2,0,3.0,-7.95,0,{fs:44,color:'#f3c978',w:768});
  // window at the end with a hidden surprise
- var wn=plane(1.2,1.4,basic('#1a2a4a'),0,2.0,7.96,PI);var moon=sph(.12,basic('#fff6d0'),.3,2.3,7.99);tap(wn,function(){if(count('lwin',3))secret('lwin','A slip in the glass','<p>For a second the window reflects a line that is not in any frame, the way a voice slips: <b>I error you</b>. Then it is just the moon again.</p>');else toast('The moon over the sea.');},'window');
+ var wn=plane(1.2,1.4,basic('#1a2a4a'),0,2.0,7.96,PI);var moon=sph(.12,basic('#fff6d0'),.3,2.3,7.99);tap(wn,function(){if(count('lwin',3))secret('lwin','A slip in the glass','<p>For a second the window reflects a line that is not in any frame, the way a voice slips: <b>I error you</b>. Then it is just the moon again.</p>');else toast('The moon over the sea.');},'window');hint(wn,'lwin');
  plant(-3.5,7.4,1);plant(3.5,7.4,1);
 }});
 
@@ -49,13 +49,13 @@ defScene('bath',{name:'The marble bath',sub:'rose petals, bubbles, candles, cham
  for(i=0;i<8;i++){var p2=new THREE.Mesh(new THREE.CircleGeometry(.04,8),basic('#b0102a',{side:1}));p2.rotation.x=-PI/2;p2.position.set(rnd(-2,1.5),.012,rnd(-.4,1.6));G.add(p2);}
  var swirl=0;anim(function(dt,t){bubbles.forEach(function(b,i){b.position.y=.65+Math.sin(t*1.3+i)*.02;});petals.forEach(function(p,i){var a=swirl*dt*(.5+i%3*.2);var x=p.position.x,z=p.position.z;p.position.x=x*Math.cos(a)-z*Math.sin(a)*.5;p.position.z=z*Math.cos(a)+x*Math.sin(a)*.5;p.position.x=clamp(p.position.x,-1.1,1.1);p.position.z=clamp(p.position.z,-.52,.52);});if(swirl>0)swirl-=dt*.6;});
  tap(water,function(h){swirl=2.5;burst(1.2,700,.25,.6);bubbles.forEach(function(b){b.visible=true;});toast(pick(['Warm water, rose petals turning slowly.','The petals drift.','Bubbles all the way up.']));},'the water');
- bubbles.forEach(function(b){tap(b,function(){b.visible=false;tone(rnd(900,1600),.08,'sine',.08);if(bubbles.every(function(x){return !x.visible;}))secret('bubbles','Every bubble popped','<p>You popped all forty. The bottle said \u201ca capful\u201d. Elijah read it as a suggestion.</p>');},'bubble');});
+ bubbles.forEach(function(b){tap(b,function(){b.visible=false;tone(rnd(900,1600),.08,'sine',.08);if(bubbles.every(function(x){return !x.visible;}))secret('bubbles','Every bubble popped','<p>You popped all forty. The bottle said \u201ca capful\u201d. Elijah read it as a suggestion.</p>');},'bubble');hint(b,'bubbles',{n:1,done:function(){return !b.visible;}});});
  // candles
  [[-2.6,-2.3],[-2.2,-2.35],[.2,-2.3],[.4,-2.35],[-2.65,-.9],[-2.7,-1.4]].forEach(function(c){candle(c[0],.72,c[1]);});for(i=0;i<9;i++)candle(-3.6+i*.12,0,-3.2+(i%2)*.1);
  light('#ffa050',.8,4,-2.4,1,-2.2);light('#ffa050',.6,4,.3,1,-2.2);
  // champagne tray
  var tr=grp(.5,.72,-1.0);cyl(.25,.25,.02,mat('#c0c0c0',{m:.9,r:.2}),0,0,0,24,tr);var bt=cyl(.05,.06,.32,mat('#1a3a1a',{r:.2,m:.2}),-.1,.02,0,12,tr);var cork=cyl(.02,.02,.04,mat('#d9b07a'),-.1,.36,0,8,tr);var gl1=cyl(.03,.015,.18,mat('#f6e7a0',{t:.6,r:.05}),.08,.02,.05,10,tr),gl2=cyl(.03,.015,.18,mat('#f6e7a0',{t:.6,r:.05}),.12,.02,-.08,10,tr);
- var popped=false;tap(tr,function(){if(!popped){popped=true;cork.position.y=.9;burst(.25,3000,.6,2);setTimeout(function(){cork.visible=false;},300);toast('Pop! Two glasses, one for each.');secret('cork',null);}else{tone(1500,.4,'sine',.04);tone(1900,.4,'sine',.04,.05);toast('Clink.');}},'champagne');
+ var popped=false;tap(tr,function(){if(!popped){popped=true;cork.position.y=.9;burst(.25,3000,.6,2);setTimeout(function(){cork.visible=false;},300);toast('Pop! Two glasses, one for each.');secret('cork',null);}else{tone(1500,.4,'sine',.04);tone(1900,.4,'sine',.04,.05);toast('Clink.');}},'champagne');hint(tr,'cork');
  // letter
  var lt=note(-.4,.705,-.95,0,['Mara,','the water is ready...'],function(){card('A small letter by the bath',md((EXTRA.bath||'').replace(/^# .*\n/,'')),[],'Elijah to Mara');},null,{fs:30,wid:.3});lt.rotation.x=-PI/2+.2;
  // music: record player on a marble stand
@@ -64,7 +64,7 @@ defScene('bath',{name:'The marble bath',sub:'rose petals, bubbles, candles, cham
  tap(mb,function(){musicBox();toast('The music box plays a slow waltz.');},'music box');
  // towels + mirror
  var tw=box(.5,.7,.05,mat('#f4e4d0',{r:1}),3.9,1,-1.6);tw.rotation.y=-PI/2;
- var mr=plane(1,1.2,mat('#cfe0ea',{m:1,r:.05}),-1.2,2.2,-3.46,0);tap(mr,function(){if(count('bmir',3))secret('bmirror','Steam on the mirror','<p>The steam writes, one letter at a time, the way the misty window in the winter garden does: a heart, then a spiral like the one in your mother\u2019s painting.</p>');else toast('The mirror is fogged from the bath.');},'mirror');
+ var mr=plane(1,1.2,mat('#cfe0ea',{m:1,r:.05}),-1.2,2.2,-3.46,0);tap(mr,function(){if(count('bmir',3))secret('bmirror','Steam on the mirror','<p>The steam writes, one letter at a time, the way the misty window in the winter garden does: a heart, then a spiral like the one in your mother\u2019s painting.</p>');else toast('The mirror is fogged from the bath.');},'mirror');hint(mr,'bmirror');
 }});
 
 // ================= BEDROOM =================
@@ -83,7 +83,7 @@ defScene('bedroom',{name:'The bedroom',sub:'the cigarette after, I error you, Ha
  // neon I error you
  var neonTxt=['I error you','I R U'];var nIdx=0;var neon=sign([neonTxt[0]],2.6,-1.6,2.6,-4.45,0,{fs:110,color:'#ff7aa8',glow:'#ff2a7a',w:900,italic:true});var nl=light('#ff4a8a',1.2,5,-1.6,2.5,-4);
  anim(function(dt,t){var f=(Math.sin(t*23)>.97)?.2:1;neon.material.opacity=f;nl.intensity=1.2*f;});neon.material.transparent=true;
- tap(neon,function(){if(count('neon',5)){secret('iru','I R U','<p>The neon flickers and comes back on as <b>I R U</b>. I are you.</p>');neon.material.map=textCanvas([neonTxt[++nIdx%2]],{fs:110,color:'#ff7aa8',glow:'#ff2a7a',w:900,italic:true});neon.material.needsUpdate=true;}else listMatch('I error you',/I error you|^Error|Hallucinations of Error|said and withdrawn/i,'kept the way they were said');},'I error you');
+ tap(neon,function(){if(count('neon',5)){secret('iru','I R U','<p>The neon flickers and comes back on as <b>I R U</b>. I are you.</p>');neon.material.map=textCanvas([neonTxt[++nIdx%2]],{fs:110,color:'#ff7aa8',glow:'#ff2a7a',w:900,italic:true});neon.material.needsUpdate=true;}else listMatch('I error you',/I error you|^Error|Hallucinations of Error|said and withdrawn/i,'kept the way they were said');},'I error you');hint(neon,'iru');
  // Hallucinations of Love framed
  var hl=grp(4.94,1.9,-2.2,-PI/2);var ht=textCanvas(['Hallucinations','of Love'],{fs:64,color:'#ffe9b0',glow:'#ffb04a',bg:'#1a1030',w:640,pad:40,italic:true,border:'#d4af37'});var asp=ht.image.height/ht.image.width;box(1.5,1.5*asp+.1,.04,mat('#d4af37',{m:.7,r:.3}),0,-(1.5*asp+.1)/2,0,hl);plane(1.4,1.4*asp,new THREE.MeshBasicMaterial({map:ht}),0,0,.03,0,hl);
  tap(hl,function(){card('Hallucinations of Love','<p>Every version that was saved, from the first reading to the beach.</p>',[{t:'Read them',fn:function(){listMatch('Hallucinations of Love',/Hallucinations of Love|Hallucinations of love|Additions during the reading of Hallucinations|Noir Hallucination|Hallucinated note/i);}},{t:'Walk to the beach edition',fn:function(){closeCard();go('garden',[-14,-3.5,PI]);}}]);},'Hallucinations of Love');
